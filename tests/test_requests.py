@@ -13,7 +13,7 @@ class TestRequest(TestBase):
     def test_join_request_issuccesful(self):
         """Test API can succesfully send a request to join 
         a ride (POST request)"""    
-        response = self.client.post('api/v1/rides/1/requests',
+        response = self.client.post('api/v2/rides/1/requests',
                                     content_type='application/json',
                                     data=json.dumps({}))
         self.assertEqual(response.status_code, 201)
@@ -23,12 +23,12 @@ class TestRequest(TestBase):
 
     def test_driver_can_get_all_ride_requests(self):
         """Test API can succesfully get all ride requests (GET request)"""    
-        response = self.client.get('api/v1/rides/1/requests')
+        response = self.client.get('api/v2/rides/1/requests')
         self.assertEqual(response.status_code, 200)
     
     def test_respond_to_request(self):
         """Tests if a driver can respond to a ride request succesfully"""
-        response = self.client.put('api/v1/rides/1/requests/1',
+        response = self.client.put('api/v2/rides/1/requests/1',
                                     content_type='application/json',
                                     data=json.dumps({'respond':'accept'}))
         self.assertEqual(response.status_code, 200)
