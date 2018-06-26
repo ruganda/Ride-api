@@ -1,0 +1,10 @@
+language: python
+python:
+   "3.6.3"
+install:
+    "pip install -r requirements.txt"
+script:
+    - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
+after_success:
+    - "coveralls"
+    
