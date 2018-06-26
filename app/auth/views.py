@@ -10,6 +10,6 @@ registration_view = RegistrationView.as_view('registration_view')
 
 # Add the url rule for registering a user
 auth_blueprint.add_url_rule(
-    '/api/v1/register',
+    '/api/v2/auth/register',
     view_func=registration_view,
     methods=['POST'])
