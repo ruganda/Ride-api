@@ -1,8 +1,7 @@
-from test_base import TestBase
 import unittest
 from flask import json
 import psycopg2
-
+from test_base import TestBase
 
 class TestAuth(TestBase):
 
