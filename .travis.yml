@@ -3,6 +3,10 @@ python:
    "3.6.3"
 install:
     "pip install -r requirements.txt"
+services:
+  - postgresql
+before_script:
+  - psql -c 'create database ride_db;' -U postgres
 script:
     - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
 after_success:
