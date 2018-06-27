@@ -37,3 +37,19 @@ class RideAPI(MethodView):
                 'message': str(e)
             }
             return make_response(jsonify(response)), 500
+    
+    def get(self, current_user):
+        """Method for  get requests"""
+        try:
+            ride = Ride()
+            rides = ride.fetch_all()
+            if rides == []:
+                return jsonify({"msg": " There are no rides rides at the moment"}), 200
+            return jsonify(rides), 200
+        except Exception as e:
+            response = {
+                'message': str(e)
+            }
+            return make_response(jsonify(response)), 500
+
+            
