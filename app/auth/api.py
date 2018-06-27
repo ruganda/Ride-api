@@ -50,7 +50,7 @@ class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
 
     def post(self):
-        '''Logs in a registered user'''
+        '''Logs in a registered user and returns a token'''
         data = request.get_json()
 
         try:
