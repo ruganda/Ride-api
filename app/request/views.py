@@ -10,3 +10,6 @@ request_app.add_url_rule('/api/v2/rides/<ride_id>/requests',
 
 request_app.add_url_rule('/api/v2/rides/<ride_id>/requests',
                          view_func=request_view, methods=['GET', ])
+
+request_app.add_url_rule('/api/v2/rides/<ride_id>/requests/<request_id>',
+                         view_func=request_view, methods=['PUT', ])

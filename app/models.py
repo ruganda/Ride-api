@@ -83,9 +83,12 @@ class Ride(Database):
 class Request(Database):
     ''' Defines the Request class'''
 
-    def __init__(self, status="requested"):
+    def __init__(self,id=None,ride_id =None, status="requested",passenger = None):
         Database.__init__(self)
+        self.id = id
+        self.ride_id = ride_id
         self.status = status
+        self.passenger = passenger
 
     def insert(self, r_id, passenger):
         query = "INSERT INTO requests (ride_id,status passenger) VALUES('{}','{}' '{}');"\
@@ -111,3 +114,10 @@ class Request(Database):
             requests.append(
                 {'Id': row[0], 'ride': row[1],'status': row[2], 'passenger': row[3]})
         return requests
+    
+    def update_request(self, rId, data):
+        '''Updates the status in the database'''
+        self.cur.execute("UPDATE requests SET status=%s,  WHERE id=%s",
+                       (data['status'], rId))
+        self.cur.commit()
+        
