@@ -30,4 +30,16 @@ class RequestAPI(MethodView):
                 }
                 return make_response(jsonify(response)), 500
 
-    
+    def get(self, current_user, ride_id):
+        '''Gets all requests''' 
+        try:
+            request = Request()
+            requests = request.fetch_all()
+            if requests == []:
+                return jsonify({"msg": "You haven't recieved any ride requests yet"}), 200
+            return jsonify(requests), 200
+        except Exception as e:
+            response = {
+                'message': str(e)
+            }
+            return make_response(jsonify(response)), 500
