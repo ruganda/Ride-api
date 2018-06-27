@@ -43,3 +43,24 @@ class RequestAPI(MethodView):
                 'message': str(e)
             }
             return make_response(jsonify(response)), 500
+   
+    def put(self,current_user, ride_id, request_id):
+        """Accept or reject a ride request"""
+        data = request.get_json()
+        if data['status']=='accepted' or data['status'] =='rejected':
+            try:
+                req=Request(id=request_id,ride_id = ride_id)
+                req.update_request(request_id,data)
+                response = {
+                'message':'you have {} this ride request'.format(data['status'])
+                }
+                return make_response(jsonify(response)), 200
+            except Exception as e:
+                response = {
+                    'message': str(e)
+                }
+                return make_response(jsonify(response)), 500
+        response = {
+            'message':'The status can only be in 3 states, requested, accepted and rejected'
+        }
+        return make_response(jsonify(response)), 401
