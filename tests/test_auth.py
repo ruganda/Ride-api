@@ -33,7 +33,7 @@ class TestAuth(TestBase):
         """ Tests creating a new user with existing username """
         self.create_valid_user()
         response = self.create_valid_user()
-        self.assertEqual(response.status_code, 202)
+        self.assertEqual(response.status_code, 409)
         self.assertIn("User already exists. Please login.", str(response.data))
         self.delete_valid_user()
 

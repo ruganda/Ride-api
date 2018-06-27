@@ -1,4 +1,3 @@
-from werkzeug.security import generate_password_hash, check_password_hash
 import psycopg2
 
 
@@ -20,7 +19,7 @@ class User(Database):
         self.user_id = user_id
         self.name = name
         self.username = username
-        self.password = generate_password_hash(password, method='sha256')
+        self.password = password
         self.rides_given = 0
         self.rides_taken = 0
 
@@ -91,8 +90,8 @@ class Request(Database):
         self.passenger = passenger
 
     def insert(self, r_id, passenger):
-        query = "INSERT INTO requests (ride_id,status passenger) VALUES('{}','{}' '{}');"\
-            .format(r_id, self.status, passenger)
+        query = "INSERT INTO requests (ride_id, status, passenger) VALUES('{}','{}', '{}');"\
+.format(r_id, self.status, passenger)
         self.cur.execute(query)
         self.conn.commit()
 
@@ -117,7 +116,7 @@ class Request(Database):
     
     def update_request(self, rId, data):
         '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status=%s,  WHERE id=%s",
+        self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
                        (data['status'], rId))
-        self.cur.commit()
+        self.conn.commit()
         

@@ -7,6 +7,7 @@ services:
   - postgresql
 before_script:
   - psql -c 'create database ride_db;' -U postgres
+  - python create_table.py
 script:
     - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
 after_success:

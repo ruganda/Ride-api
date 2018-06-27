@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from flask.views import MethodView
 from flask import jsonify, request, abort, make_response
@@ -24,7 +24,7 @@ class RegistrationView(MethodView):
                 username = data['username']
                 password = data['password']
                 user = User(name=name, username=username,
-                            password=password)
+                            password=generate_password_hash(password, method='sha256'))
                 user.insert_data(user)
 
                 response = {
@@ -68,7 +68,7 @@ class LoginView(MethodView):
             if current_user and current_user.username == data['username'] and \
                     check_password_hash(current_user.password, data['password']):
                 # Generate the access token
-                token = jwt.encode({'username': user.username, 'exp': datetime.utcnow()
+                token = jwt.encode({'username': current_user.username, 'exp': datetime.utcnow()
                                     + timedelta(minutes=60)}, 'donttouch')
                 if token:
                     response = {
