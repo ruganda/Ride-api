@@ -1,8 +1,5 @@
-import uuid
-
-from flask import abort, jsonify, make_response, request
+from flask import jsonify, make_response, request
 from flask.views import MethodView
-
 from app.auth.decoractor import token_required
 from app.models import Request
 

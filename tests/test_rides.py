@@ -1,4 +1,3 @@
-import unittest
 from flask import json
 from test_base import TestBase
 
@@ -29,7 +28,7 @@ class Testride(TestBase):
         ride = {
             'origin': 'an origin',
             'destination': 'a destination',
-            "date":"2010-11-12 12:49:00"
+            "date": "2010-11-12 12:49:00"
         }
         response = self.client.post('/api/v2/rides/',
                                     data=json.dumps(ride),
@@ -37,15 +36,16 @@ class Testride(TestBase):
                                     headers={'Authorization':
                                              self.get_token()})
         self.assertEqual(response.status_code, 406)
-        self.assertIn("ride cannot have a past date and time", str(response.data))
-    
+        self.assertIn("ride cannot have a past date and time",
+                      str(response.data))
+
     def test_make_ride_with_ivalid_date_fomart(self):
         """ Tests creating a ride with an invalid date fomart"""
         response = self.create_valid_ride()
         ride = {
             'origin': 'an origin',
             'destination': 'a destination',
-            "date":"12-11-2019 "
+            "date": "12-11-2019 "
         }
         response = self.client.post('/api/v2/rides/',
                                     data=json.dumps(ride),
@@ -54,8 +54,8 @@ class Testride(TestBase):
                                              self.get_token()})
         self.assertEqual(response.status_code, 406)
         self.assertIn("incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
-         str(response.data))
-    
+                      str(response.data))
+
     # def test_create_ride_with_valid_details(self):
     #     """ Tests adding a ride with valid details """
     #     response = self.create_post_ride()
@@ -67,7 +67,7 @@ class Testride(TestBase):
         ride = {
             'origin': '',
             'destination': '',
-            'date':''
+            'date': ''
         }
         response = self.client.post('/api/v2/rides/',
                                     data=json.dumps(ride),
@@ -75,13 +75,13 @@ class Testride(TestBase):
                                     headers={'Authorization':
                                              self.get_token()})
         self.assertEqual(response.status_code, 406)
-    
+
     def test_create_ride_with_invalid_characters(self):
         """ Tests creating a ride with a blank origin or destination """
         ride = {
             'origin': '@#$%',
             'destination': '@#$%',
-            'date':'!@#$'
+            'date': '!@#$'
         }
         response = self.client.post('/api/v2/rides/',
                                     data=json.dumps(ride),
@@ -109,7 +109,7 @@ class Testride(TestBase):
     def test_get_rides_valid_id(self):
         """ Tests querying a rides by a valid ID """
 
-        response = self.client.get('/api/v2/rides/1' ,
+        response = self.client.get('/api/v2/rides/1',
                                    headers={'Authorization':
                                             self.get_token()})
         self.assertEqual(response.status_code, 200)

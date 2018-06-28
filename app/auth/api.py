@@ -2,9 +2,10 @@ from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from flask.views import MethodView
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, make_response
 from app.models import User
 from app.validate import validate_user, validate_login
+
 
 class RegistrationView(MethodView):
     """This class-based view registers a new user."""
@@ -45,7 +46,8 @@ class RegistrationView(MethodView):
                 }
 
                 return make_response(jsonify(response)), 409
-        return jsonify({'message':validate}), 406
+        return jsonify({'message': validate}), 406
+
 
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
@@ -71,7 +73,7 @@ class LoginView(MethodView):
                         check_password_hash(current_user.password, data['password']):
                     # Generate the access token
                     token = jwt.encode({'username': current_user.username, 'exp': datetime.utcnow()
-                                        + timedelta(days= 10, minutes=60)}, 'donttouch')
+                                        + timedelta(days=10, minutes=60)}, 'donttouch')
                     if token:
                         response = {
                             'message': 'You logged in successfully.',
@@ -89,4 +91,4 @@ class LoginView(MethodView):
                     'message': str(e)
                 }
                 return make_response(jsonify(response)), 500
-        return jsonify({'message':validate}), 406
+        return jsonify({'message': validate}), 406

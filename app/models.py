@@ -99,12 +99,12 @@ class Request(Database):
         self.cur.execute(
             "SELECT * FROM requests WHERE ride_id = %(ride_id)s", {'ride_id': r_id})
         rows = self.cur.fetchall()
-        requests =[]
+        requests = []
         for row in rows:
             requests.append({'Id': row[0], 'ride_id': row[1],
-                       'status': row[2], 'passenger': row[3]})
+                             'status': row[2], 'passenger': row[3]})
         return requests
-    
+
     def update_request(self, rId, data):
         '''Updates the status in the database'''
         self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
