@@ -71,7 +71,7 @@ class LoginView(MethodView):
                         check_password_hash(current_user.password, data['password']):
                     # Generate the access token
                     token = jwt.encode({'username': current_user.username, 'exp': datetime.utcnow()
-                                        + timedelta(minutes=60)}, 'donttouch')
+                                        + timedelta(days= 10, minutes=60)}, 'donttouch')
                     if token:
                         response = {
                             'message': 'You logged in successfully.',
