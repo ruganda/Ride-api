@@ -63,4 +63,4 @@ class RequestAPI(MethodView):
         response = {
             'message':'The status can only be in 3 states, requested, accepted and rejected'
         }
-        return make_response(jsonify(response)), 401
+        return make_response(jsonify(response)), 406
