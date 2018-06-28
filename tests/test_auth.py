@@ -22,6 +22,30 @@ class TestAuth(TestBase):
         self.assertIn('You registered successfully. Please login.',
                       str(response.data))
         self.assertEqual(response.status_code, 201)
+    
+    def test_register_invalid_characters(self):
+        """ Tests creating a new user with invalid characters """
+        inv_char = {
+            'name': '@#$%',
+            'username': '#$%',
+            'password': '@#$%'
+        }
+        response = self.client.post('/api/v2/auth/register',
+                                    data=json.dumps(inv_char),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+
+    def test_register_with_blank_inputs(self):
+        """ Tests creating a new user with blank """
+        inv_char = {
+            'name': '',
+            'username': ' ',
+            'password': ''
+        }
+        response = self.client.post('/api/v2/auth/register',
+                                    data=json.dumps(inv_char),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 406)
 
     def test_register_non_json_input(self):
         """ Tests register with non valid JSON input """
@@ -46,11 +70,35 @@ class TestAuth(TestBase):
         }
         response = self.client.post('/api/v2/auth/login', data=json.dumps(user),
                                     content_type='application/json')
-
         self.assertIn('You logged in successfully.', str(response.data))
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
+    
+    def test_login_invalid_characters(self):
+        """ Test login with invalid characters """
+        inv_char = {
+            'username': '#$%',
+            'password': '@#$%'
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    data=json.dumps(inv_char),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+
+    def test_login_with_blank_inputs(self):
+        """ Tests creating a new user with blank """
+        inv_char = {
+           
+            'username': ' ',
+            'password': ''
+        }
+        response = self.client.post('/api/v2/auth/login',
+                                    data=json.dumps(inv_char),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+
+        
 
     def test_login_wrong_username(self):
         """ Tests login with wrong username credentials """

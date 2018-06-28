@@ -19,7 +19,12 @@ class TestBase(unittest.TestCase):
     valid_ride = {
         'origin': 'test origin',
         'destination': "test destination",
-        'date': '2019-12-09'
+        "date":"2018-11-12 12:49:00"
+    }
+    post_ride = {
+        'origin': 'origin',
+        'destination': "test destination",
+        "date":"2019-11-12 12:49:00"
     }
     
     def setUp(self):
@@ -67,6 +72,26 @@ class TestBase(unittest.TestCase):
         cursor.execute("DELETE FROM rides WHERE origin = %s",
                        (self.valid_ride['origin'],))
         connection.close()
+    
+    def create_post_ride(self):
+        """ Creates a valid ride to be used for tests """
+        response = self.client.post('api/v2/rides/',
+                                    data=json.dumps(self.post_ride),
+                                    content_type='application/json',
+                                    headers={'Authorization':
+                                             self.get_token()})
+        return response
+
+    def delete_post_ride(self):
+        """ Deletes the valid ride after tests """
+        connection = psycopg2.connect(
+            "dbname='ride_db' user='postgres' host='localhost' password='15december' port ='5432'")
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM rides WHERE origin = %s",
+                       (self.post_ride['origin'],))
+        connection.close()
+    
+
 
     def delete_test_user(self):
         connection = psycopg2.connect(
