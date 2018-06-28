@@ -2,7 +2,8 @@ language: python
 python:
    "3.6.3"
 install:
-    "pip install -r requirements.txt"
+  - "pip install -r requirements.txt"
+  - "pip install coverage"
 services:
   - postgresql
 before_script:
@@ -10,6 +11,5 @@ before_script:
   - python create_table.py
 script:
     - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
-after_success:
-    - coveralls
+after_success: coveralls
     
