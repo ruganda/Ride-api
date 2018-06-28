@@ -11,5 +11,5 @@ before_script:
 script:
     - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
 after_success:
-    - "coveralls"
+    - coveralls
     
