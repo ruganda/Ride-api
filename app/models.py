@@ -82,7 +82,7 @@ class Ride(Database):
 class Request(Database):
     ''' Defines the Request class'''
 
-    def __init__(self,id=None,ride_id =None, status="requested",passenger = None):
+    def __init__(self, id=None, ride_id=None, status="requested", passenger=None):
         Database.__init__(self)
         self.id = id
         self.ride_id = ride_id
@@ -91,32 +91,22 @@ class Request(Database):
 
     def insert(self, r_id, passenger):
         query = "INSERT INTO requests (ride_id, status, passenger) VALUES('{}','{}', '{}');"\
-.format(r_id, self.status, passenger)
+            .format(r_id, self.status, passenger)
         self.cur.execute(query)
         self.conn.commit()
 
     def find_by_id(self, r_id):
         self.cur.execute(
-            "SELECT * FROM requests WHERE id = %(id)s", {'id': r_id})
-        row = self.cur.fetchone()
-        if row:
-            request = {'id': row[0], 'ride': row[1],
-                       'status': row[2], 'passenger': row[3]}
-        return request
-
-    def fetch_all(self):
-        """ Fetches all request recods from the database"""
-        self.cur.execute("SELECT * FROM requests ")
+            "SELECT * FROM requests WHERE ride_id = %(ride_id)s", {'ride_id': r_id})
         rows = self.cur.fetchall()
-        requests = []
+        requests =[]
         for row in rows:
-            requests.append(
-                {'Id': row[0], 'ride': row[1],'status': row[2], 'passenger': row[3]})
+            requests.append({'Id': row[0], 'ride_id': row[1],
+                       'status': row[2], 'passenger': row[3]})
         return requests
     
     def update_request(self, rId, data):
         '''Updates the status in the database'''
         self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
-                       (data['status'], rId))
+                         (data['status'], rId))
         self.conn.commit()
-        
