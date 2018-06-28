@@ -20,9 +20,9 @@ class RequestAPI(MethodView):
                     req= {"Id":req['Id'],"ride":req['ride'],"passenger":req['passenger']}
                     if req in all_reqs:
                         return jsonify({'msg': 'You already requested to join this ride' }), 409
-                    else:
-                        request.insert(ride_id, passenger)  
-                        return jsonify({'msg': 'A request to join this ride has been sent' }), 201 
+                    
+                request.insert(ride_id, passenger)  
+                return jsonify({'msg': 'A request to join this ride has been sent' }), 201 
             
             except Exception as e:
                 response = {
