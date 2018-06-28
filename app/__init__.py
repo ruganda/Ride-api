@@ -1,11 +1,12 @@
 from flask import Flask
 from config import app_config
 
+
 def create_app(config_name):
     """Creates the application and registers the blueprints 
         with the application
     """
-    app = Flask(__name__)  
+    app = Flask(__name__)
     app.config.from_object(app_config[config_name])
     from app.request.views import request_app
     from app.ride.views import ride_app
@@ -15,4 +16,3 @@ def create_app(config_name):
     app.register_blueprint(ride_app)
     app.register_blueprint(request_app)
     return app
-    

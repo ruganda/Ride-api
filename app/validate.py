@@ -1,29 +1,32 @@
-from datetime import date, datetime
-import re 
+from datetime import datetime
+import re
+
 
 def validate_user(data):
     """validates the user and return appropriate message"""
-    if not data['name'].strip()  or  not data['username'].strip() or not data['password'].strip() :
+    if not data['name'].strip() or not data['username'].strip() or not data['password'].strip():
         return "all fields are required"
-    elif  not re.match("^[a-zA-Z0-9_ ]*$", data['name'].strip()):
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['name'].strip()):
         return "Name should only contain alphanemeric characters"
-    elif  not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
         return "username should only contain alphanemeric characters"
-    elif  not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
+    elif not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
         return "Password should only contain alphanemeric characters "
     else:
         return 'valid'
 
+
 def validate_login(data):
     """validates the user and return appropriate message"""
-    if not data['username'].strip() or not data['password'].strip() :
+    if not data['username'].strip() or not data['password'].strip():
         return "all fields are required"
-    elif  not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
         return "username should only contain alphanemeric characters"
-    elif  not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
+    elif not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
         return "Password should only contain alphanemeric characters "
     else:
         return 'valid'
+
 
 def validate_ride(data):
     """validates the rides inputs and return appropriate message"""
@@ -35,6 +38,7 @@ def validate_ride(data):
         return "ride location should only contain alphanemeric characters"
     else:
         return 'valid'
+
 
 def validate_date(date_time):
     """check that the ride date and time is not past"""
