@@ -23,7 +23,7 @@ class RideAPI(MethodView):
                 for this_ride in all_rides:
                     if this_ride['origin'] == ride.origin and \
                             this_ride['destination'] == ride.destination\
-                            and this_ride['date'] == ride.date and \
+                            and str(this_ride['date']) == str(ride.date) and \
                             this_ride['driver'] == current_user[2]:
                         response = {
                             'message': 'This ride already exists.',
