@@ -116,7 +116,7 @@ class TestAuth(TestBase):
 
         self.assertIn(
             'user not found , please register an account to continue.', str(response.data))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
 
     def test_login_invalid_password(self):
         """ Tests login with wrong password  """
