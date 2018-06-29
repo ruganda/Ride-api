@@ -1,0 +1,234 @@
+FORMAT: 1A
+HOST: https://ruga.herokuapp.com
+
+# Ride-api
+
+Ride-api is a carpooling application that provides drivers with the ability to create ride offers and passengers  to join available ride offers.
+
+## User Registration [/api/v2/auth/register]
+
+### Register a new user [POST]
+
+You can create a user by sending a json request with name, username and password.
+All input can only contain alphanumeric characters.
++ Request(application/json)
+
+            {   
+                "name" : "example name",
+                "username" : "examplename",
+                "password" : "password"
+            }
+
++ Response 201 (application/json)
+
+            {
+                "response" : "You registered successfully. Please login."
+            }
+            
+            
++ Response 409 (application/json)
+
+            {
+                "response" : "User already exists. Please login."
+            }
+            
++ Response 406 (application/json)
+
+            {
+                "response" : "name can only contain alphanumeric characters"
+            }
+            
+## Login [/api/v2/auth/login]
+
+### Login a user [POST]
+
+you can login a user by sending their username and password
+
++ Request (application/json)
+
+            {
+                "username":"examplename",
+                "password" : "password"
+            }
+            
++ Response 200 (application/json)
+
+            {
+                "response" : "You logged in successfully."
+            }
+            
++ Response 403 (application/json)
+
+            {
+                "response" : "Invalid username or password, Please try again."
+            }
++ Response 406 (application/json)
+
+            {
+                "response" : "username can only contain alphanumeric characters"
+            }           
+            
+## rides [/api/v2/rides/]
+
+### Offer a ride [POST]
+
+You can offer a ride sending the ride origin, destination and date.
+The date of a ride has to be a future timestamp of the fomart YY-MM-DD HH:MM:SS.
+
+
++ Request (application/json)
+
+            { 
+            "origin":"Masaka town",
+            "destination":"Entebbe",
+            "date":"2019-11-12 12:49:00"
+            }
+            
++ Response 201 (application/json)
+
+            {
+                "response" : "You offered a ride successfully."
+            }
+            
++ Response 409 (application/json)
+
+            {
+                "response" : "This ride already exists."
+            }
+            
++ Response 406 (application/json)
+
+            {
+                "response" : "ride cannot have a past date and time"
+            }
+
++ Response 406 (application/json)
+
+            {
+                "response" : "incorrect date and time format, should be YYYY-MM-DD HH:MM:SS"
+            }
+
+### Fetch all ride offers [GET]
+Helps  passengers view all the available ride offers so that they can choose an 
+offer that suites their interests
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "date": "Mon, 12 Nov 2018 12:49:00 GMT",
+                "destination": "test destination",
+                "driver": "validuser",
+                "id": 1,
+                "origin": "test origin"
+            },
+            {
+                "date": "Tue, 12 Nov 2019 12:49:00 GMT",
+                "destination": "Entebbe",
+                "driver": "ruga",
+                "id": 2,
+                "origin": "Masaka town"
+            }
+        ]
+        
+## Get a specific ride offer [/api/v2/rides/{ride_id}]
+
+### Get single ride [GET]
+ * You can get a single ride given its id.
+ - This helps passengers to view the details of the ride offer, so that they can send 
+ a request to join the ride offered.
+
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+            {
+            "date": "Tue, 12 Nov 2019 12:49:00 GMT",
+            "destination": "Entebbe",
+            "driver": "ruga",
+            "id": 2,
+            "origin": "Masaka town"
+            }
+            
+
+
+## Request to join a ride [/api/v2/rides/<ride_id>/requests]
+
+### Request to join a ride [POST]
+A passenger sends a request to join a ride offer
+
++ Request (application/json)
+
++ Response 201 (application/json)
+
+            {
+                "response" : "A request to join this ride has been sent"
+            }
+            
++ Response 409 (application/json)
+
+            {
+                "response" : "You already requested to join this ride"
+            }
+
+### Fetch all ride requests [GET]
+This endpoint helps the creator of the ride offer to see the responses so far.
+All the requests returned should contain the name of the interested party
+
++ Request (application/json)
+
++ Response 200 (application/json)
+
+        [
+            {
+                "Id": 2,
+                "passenger": "examplename1",
+                "ride_id": 7,
+                "status": "requested"
+            }
+            {
+                "Id": 3,
+                "passenger": "examplename2",
+                "ride_id": 7,
+                "status": "requested"
+            }
+        ]
+            
++ Response 200 (application/json)
+
+            {
+                "response" : "You haven't recieved any ride requests yet"
+            }  
+            
+
+## Accept/reject a request [/api/v2/rides/<ride_id>/requests/<request_id>]
+
+### Request to join a ride [PUT]
+The creater of the request can accept or reject a request to the ride offer
+
++ Request (application/json)
+
+            {
+              "status":"accepted"
+            }
+
++ Response 200 (application/json)
+
+            {
+                "response" : "you have accepted this ride request"
+            }
+
++ Response 200 (application/json)
+
+            {
+                "response" : "you have rejected this ride request"
+            }
+
++ Response 200 (application/json)
+
+            {
+                "response" : "The status can only be in 3 states, requested, accepted and rejected"
+            }
