@@ -1,6 +1,7 @@
+import unittest
 from flask import json
+import psycopg2
 from test_base import TestBase
-
 
 class TestAuth(TestBase):
 
@@ -21,7 +22,7 @@ class TestAuth(TestBase):
         self.assertIn('You registered successfully. Please login.',
                       str(response.data))
         self.assertEqual(response.status_code, 201)
-
+    
     def test_register_invalid_characters(self):
         """ Tests creating a new user with invalid characters """
         inv_char = {
@@ -73,7 +74,7 @@ class TestAuth(TestBase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data.decode())
         self.assertTrue(data['token'])
-
+    
     def test_login_invalid_characters(self):
         """ Test login with invalid characters """
         inv_char = {
@@ -88,7 +89,7 @@ class TestAuth(TestBase):
     def test_login_with_blank_inputs(self):
         """ Tests creating a new user with blank """
         inv_char = {
-
+           
             'username': ' ',
             'password': ''
         }
@@ -96,6 +97,8 @@ class TestAuth(TestBase):
                                     data=json.dumps(inv_char),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 406)
+
+        
 
     def test_login_wrong_username(self):
         """ Tests login with wrong username credentials """
@@ -116,7 +119,7 @@ class TestAuth(TestBase):
 
         self.assertIn(
             'user not found , please register an account to continue.', str(response.data))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_login_invalid_password(self):
         """ Tests login with wrong password  """
@@ -137,4 +140,4 @@ class TestAuth(TestBase):
 
         self.assertIn(
             'Invalid username or password, Please try again.', str(response.data))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
