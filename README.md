@@ -2,6 +2,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/ruganda/Ride-api/badge.svg?branch=develop)](https://coveralls.io/github/ruganda/Ride-api?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/36b826ffbeae475d95b7d6be8773a178)](https://www.codacy.com/app/ruganda/Ride-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ruganda/Ride-api&amp;utm_campaign=Badge_Grade)
 [![Maintainability](https://api.codeclimate.com/v1/badges/78ffc2eb1c22277b0725/maintainability)](https://codeclimate.com/github/ruganda/Ride-api/maintainability)
+<a href='https://coveralls.io/github/ruganda/Ride-api?branch=develop'><img src='https://coveralls.io/repos/github/ruganda/Ride-api/badge.svg?branch=develop' alt='Coverage Status' /></a>
+
 # Ride-api
 Ride-my App is a carpooling application that provides drivers with the ability to create ride offers and passengers  to join available ride offers.
 
@@ -25,7 +27,7 @@ Ride-my App is a carpooling application that provides drivers with the ability t
 - Can accept/reject ride request
 
 **Application demo**
-
+* The documentation can be accessed at https://rideapi1.docs.apiary.io/#
 * To interact with the application via postman
      * https://rugandaride.herokuapp.com/api/v2
 
