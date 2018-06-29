@@ -85,7 +85,7 @@ class LoginView(MethodView):
                     response = {
                         'message': 'Invalid username or password, Please try again.'
                     }
-                    return make_response(jsonify(response)), 401
+                    return make_response(jsonify(response)), 403
             except Exception as e:
                 response = {
                     'message': str(e)
