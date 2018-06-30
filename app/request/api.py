@@ -33,19 +33,25 @@ class RequestAPI(MethodView):
                 return make_response(jsonify(response)), 500
 
     def get(self, current_user, ride_id):
-        '''Gets all requests'''
-        try:
+        '''Gets all ride requests for a specific ride'''
+        # first check if the ride was created by the logged in driver
+        ride = Ride(id=ride_id)
+        the_ride = ride.find_by_id(ride_id)
+        if the_ride is None:
+            abort(404)
+
+        if the_ride['driver'] == current_user[2]:
             request = Request(ride_id=ride_id)
             requests = request.find_by_id(ride_id)
             if requests == []:
                 return jsonify({"msg": "You haven't recieved any ride" +
                                 " requests yet"}), 200
             return jsonify(requests), 200
-        except Exception as e:
-            response = {
-                'message': str(e)
-            }
-            return make_response(jsonify(response)), 500
+        response = {
+            'message': 'Forbidden access! You can only view' +
+            ' rides you created'
+        }
+        return jsonify(response), 403
 
     def put(self, current_user, ride_id, request_id):
         """Accept or reject a ride request"""
@@ -54,8 +60,7 @@ class RequestAPI(MethodView):
         the_ride = ride.find_by_id(ride_id)
         if the_ride is None:
             abort(404)
-        print(the_ride["driver"])
-        print(current_user[2])
+
         if the_ride['driver'] == current_user[2]:
             data = request.get_json()
             if data['status'] == 'accepted' or data['status'] == 'rejected':
