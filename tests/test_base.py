@@ -58,7 +58,7 @@ class TestBase(unittest.TestCase):
 
     def create_valid_ride(self):
         """ Creates a valid ride to be used for tests """
-        response = self.client.post('api/v2/rides/',
+        response = self.client.post('api/v2/users/rides/',
                                     data=json.dumps(self.valid_ride),
                                     content_type='application/json',
                                     headers={'Authorization':
@@ -77,7 +77,7 @@ class TestBase(unittest.TestCase):
 
     def create_post_ride(self):
         """ Creates a valid ride to be used for tests """
-        response = self.client.post('api/v2/rides/',
+        response = self.client.post('api/v2/users/rides/',
                                     data=json.dumps(self.post_ride),
                                     content_type='application/json',
                                     headers={'Authorization':
