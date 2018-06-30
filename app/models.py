@@ -52,17 +52,18 @@ class Ride(Database):
         self.date = date
 
     def find_by_id(self, r_id):
+        """selects a single ride by id from the database"""
         self.cur.execute(
             "SELECT * FROM rides WHERE id = %(id)s", {'id': r_id})
 
         row = self.cur.fetchone()
         if row:
-            ride = {'id': row[0], 'origin': row[1],
+            RIDE = {'id': row[0], 'origin': row[1],
                     'destination': row[2], 'date': row[3], "driver": row[4]}
-            return ride
+            return RIDE
 
     def insert(self, driver):
-
+        """Insert a new ride record to the database"""
         query = "INSERT INTO rides (origin, destination, date, driver)\
          VALUES(%s, %s, %s, %s)"
         self.cur.execute(query, (self.origin, self.destination,
@@ -72,16 +73,28 @@ class Ride(Database):
     def fetch_all(self):
         """ Fetches all ride recods from the database"""
         self.cur.execute("SELECT * FROM rides ")
-        rows = self.cur.fetchall()
-        rides = []
-        for row in rows:
+        ROWS = self.cur.fetchall()
+        RIDES = []
+        for row in ROWS:
             print(row)
-            rides.append({'id': row[0], 'origin': row[1],
+            RIDES.append({'id': row[0], 'origin': row[1],
                           'destination': row[2],
                           'date': row[3], "driver": row[4]
                           })
+            return RIDES
 
-        return rides
+    def fetch_all_by_driver(self, driver):
+        """ Fetches all ride recods of a driver from the database"""
+        self.cur.execute("SELECT * FROM rides WHERE driver = %(driver)s",
+                         {'driver': driver})
+        ROWS = self.cur.fetchall()
+        RIDES = []
+        for row in ROWS:
+            RIDES.append({'id': row[0], 'origin': row[1],
+                          'destination': row[2],
+                          'date': row[3], "driver": row[4]
+                          })
+            return RIDES
 
 
 class Request(Database):
@@ -107,11 +120,11 @@ class Request(Database):
             "SELECT * FROM requests WHERE ride_id = %(ride_id)s",
             {'ride_id': r_id})
         rows = self.cur.fetchall()
-        requests = []
+        REQUESTS = []
         for row in rows:
-            requests.append({'Id': row[0], 'ride_id': row[1],
+            REQUESTS.append({'Id': row[0], 'ride_id': row[1],
                              'status': row[2], 'passenger': row[3]})
-        return requests
+        return REQUESTS
 
     def update_request(self, rId, data):
         '''Updates the status in the database'''
