@@ -1,4 +1,4 @@
-from flask import jsonify, make_response, request
+from flask import jsonify, make_response, request, abort
 from flask.views import MethodView
 from app.auth.decoractor import token_required
 from app.models import Request, Ride
@@ -38,8 +38,8 @@ class RequestAPI(MethodView):
             request = Request(ride_id=ride_id)
             requests = request.find_by_id(ride_id)
             if requests == []:
-                return jsonify({"msg": "You haven't recieved any ride\
-                 requests yet"}), 200
+                return jsonify({"msg": "You haven't recieved any ride" +
+                                " requests yet"}), 200
             return jsonify(requests), 200
         except Exception as e:
             response = {
@@ -52,6 +52,8 @@ class RequestAPI(MethodView):
         # first check if the ride was created by the logged in driver
         ride = Ride(id=ride_id)
         the_ride = ride.find_by_id(ride_id)
+        if the_ride is None:
+            abort(404)
         print(the_ride["driver"])
         print(current_user[2])
         if the_ride['driver'] == current_user[2]:
@@ -77,6 +79,6 @@ class RequestAPI(MethodView):
             return make_response(jsonify(response)), 406
         response = {
             'message': 'Forbidden access! You can only repond' +
-            'to rides you created'
+            ' to rides you created'
         }
         return jsonify(response), 403
