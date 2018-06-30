@@ -59,8 +59,7 @@ class Ride(Database):
         if row:
             ride = {'id': row[0], 'origin': row[1],
                     'destination': row[2], 'date': row[3], "driver": row[4]}
-        self.conn.close()
-        return ride
+            return ride
 
     def insert(self, driver):
 
