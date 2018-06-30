@@ -106,3 +106,4 @@ class TestBase(unittest.TestCase):
     def tearDown(self):
         self.delete_valid_user()
         self.delete_valid_ride()
+        self.delete_post_ride()

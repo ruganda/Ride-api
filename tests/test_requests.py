@@ -11,7 +11,31 @@ class TestRequest(TestBase):
     def setUp(self):
         self.create_valid_user()
         self.create_valid_ride
+        self.delete_post_ride()
 
+    # def test_join_request_issuccesful(self):
+    #     """Test create send join ride request successfully"""
+    #     self.delete_post_ride()
+    #     response = self.create_post_ride()
+    #     response = self.client.get('api/v2/rides/',
+    #                                headers={'Authorization':
+    #                                         self.get_token()
+    #                                         })
+    #     self.assertEqual(response.status_code, 200)
+    #     results = json.loads(response.data.decode())
+
+    #     for ride in results:
+    #         response = self.client.post('api/v2/rides/{}/requests'
+    #                                     .format(ride['id']),
+    #                                     content_type='application/json',
+    #                                     headers={'Authorization':
+    #                                              self.get_token()
+    #                                              })
+    #         self.assertEqual(response.status_code, 201)
+    #         self.assertIn(
+    #             "A request to join this ride has been sent",
+    #             str(response.data))
+    #         self.delete_post_ride()
     # def test_join_request_issuccesful(self):
     #     """Test API can succesfully send a request to join
     #     a ride (POST request)"""
@@ -65,3 +89,8 @@ class TestRequest(TestBase):
                                             self.get_token()
                                             })
         self.assertEqual(response.status_code, 406)
+
+    def tearDown(self):
+        self.delete_valid_user()
+        self.delete_valid_ride()
+        self.delete_post_ride()
