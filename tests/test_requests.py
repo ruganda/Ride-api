@@ -15,7 +15,7 @@ class TestRequest(TestBase):
 
     def test_join_ride_request_is_successful(self):
         """Test accepting a ride request successfully(PUT)"""
-        self.delete_post_ride()
+
         response = self.create_post_ride()
         response = self.client.get('api/v2/users/rides/',
                                    headers={'Authorization':
@@ -38,7 +38,6 @@ class TestRequest(TestBase):
                 self.assertIn(
                     "A request to join this ride has been sent",
                     str(response.data))
-                self.delete_post_ride()
 
     def test_send_duplicate_ride_request(self):
         """Test send a duplicate ride request"""
@@ -75,7 +74,7 @@ class TestRequest(TestBase):
 
     def test_accept_request_issuccesful(self):
         """Test accepting a ride request successfully(PUT)"""
-        self.delete_post_ride()
+
         response = self.create_post_ride()
         response = self.client.get('api/v2/users/rides/',
                                    headers={'Authorization':
@@ -119,7 +118,7 @@ class TestRequest(TestBase):
 
     def test_Reject_request_issuccesful(self):
         """Test accepting a ride request successfully (PUT)"""
-        self.delete_post_ride()
+
         response = self.create_post_ride()
         response = self.client.get('api/v2/users/rides/',
                                    headers={'Authorization':
