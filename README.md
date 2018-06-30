@@ -68,7 +68,7 @@ $ virtualenv env
 ```
 Activate the virtual environment
 ```sh
-$ cd envbin/activate.bat
+$ cd venv/scripts/activate.bat
 ```
 Install the dependencies in the requirements.txt file using pip
 ```sh
