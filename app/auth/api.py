@@ -26,11 +26,12 @@ class RegistrationView(MethodView):
                     username = data['username']
                     password = data['password']
                     user = User(name=name, username=username,
-                                password=generate_password_hash(password, method='sha256'))
+                                password=generate_password_hash
+                                (password, method='sha256'))
                     user.insert_data(user)
 
                     response = {
-                        'message': 'You registered successfully. Please login.',
+                        'message': 'You registered successfully. Please login.'
                     }
                     return make_response(jsonify(response)), 201
 
@@ -60,20 +61,26 @@ class LoginView(MethodView):
             try:
                 user = User(data['username'], data['password'])
                 user_object = user.get_single_user(data['username'])
-                if user_object == None:
+                if user_object is None:
                     response = {
-                        'message': 'user not found , please register an account to continue.'
+                        'message': 'user not found ,' +
+                        ' please register an account to continue.'
                     }
                     return make_response(jsonify(response)), 401
 
                 current_user = User(
                     username=user_object[2], password=user_object[3])
 
-                if current_user and current_user.username == data['username'] and \
-                        check_password_hash(current_user.password, data['password']):
+                if current_user and\
+                        current_user.username == data['username'] and\
+                        check_password_hash(current_user.password,
+                                            data['password']):
                     # Generate the access token
-                    token = jwt.encode({'username': current_user.username, 'exp': datetime.utcnow()
-                                        + timedelta(days=10, minutes=60)}, 'donttouch')
+                    token = jwt.encode(
+                        {'username': current_user.username,
+                         'exp': datetime.utcnow() +
+                         timedelta(days=10, minutes=60)
+                         }, 'donttouch')
                     if token:
                         response = {
                             'message': 'You logged in successfully.',
@@ -83,7 +90,8 @@ class LoginView(MethodView):
                 else:
 
                     response = {
-                        'message': 'Invalid username or password, Please try again.'
+                        'message': 'Invalid username or password,' +
+                        ' Please try again.'
                     }
                     return make_response(jsonify(response)), 403
             except Exception as e:

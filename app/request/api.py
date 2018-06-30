@@ -19,12 +19,12 @@ class RequestAPI(MethodView):
                            "status": req['status'],
                            "passenger": req['passenger']}
                     if req in all_reqs:
-                        return jsonify({'msg': 'You already requested\
-                         to join this ride'}), 409
+                        return jsonify({'msg': 'You already requested' +
+                                        ' to join this ride'}), 409
 
                 request.insert(ride_id, passenger)
-                return jsonify({'msg': 'A request to join this ride\
-                 has been sent'}), 201
+                return jsonify({'msg': 'A request to join this ride' +
+                                " has been sent"}), 201
 
             except Exception as e:
                 response = {
@@ -71,12 +71,12 @@ class RequestAPI(MethodView):
                     }
                     return make_response(jsonify(response)), 500
             response = {
-                'message': 'The status can only be in 3 states,\
-                requested, accepted and rejected'
+                'message': 'The status can only be in 3 states,' +
+                'requested, accepted and rejected'
             }
             return make_response(jsonify(response)), 406
         response = {
-            'message': 'Forbidden access! You can only repond \
-            to rides you created'
+            'message': 'Forbidden access! You can only repond' +
+            'to rides you created'
         }
-        return jsonify(response)
+        return jsonify(response), 403

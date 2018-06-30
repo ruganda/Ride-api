@@ -53,8 +53,9 @@ class Testride(TestBase):
                                     headers={'Authorization':
                                              self.get_token()})
         self.assertEqual(response.status_code, 406)
-        self.assertIn("incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
-                      str(response.data))
+        self.assertIn(
+            "incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
+            str(response.data))
 
     # def test_create_ride_with_valid_details(self):
     #     """ Tests adding a ride with valid details """

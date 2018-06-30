@@ -4,7 +4,8 @@ import re
 
 def validate_user(data):
     """validates the user and return appropriate message"""
-    if not data['name'].strip() or not data['username'].strip() or not data['password'].strip():
+    if not data['name'].strip() or not data['username'].strip()\
+            or not data['password'].strip():
         return "all fields are required"
     elif not re.match("^[a-zA-Z0-9_ ]*$", data['name'].strip()):
         return "Name should only contain alphanemeric characters"
@@ -30,7 +31,7 @@ def validate_login(data):
 
 def validate_ride(data):
     """validates the rides inputs and return appropriate message"""
-    if not 'origin' in data or not 'destination' in data or not 'date' in data:
+    if 'origin' not in data or 'destination'not in data or 'date' not in data:
         return "all fields are required"
     elif not re.match("^[a-zA-Z0-9_ ]*$", data['origin'].strip()):
         return "ride origin should only contain alphanemeric characters "

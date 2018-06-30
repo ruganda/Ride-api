@@ -19,14 +19,14 @@ class TestBase(unittest.TestCase):
     valid_ride = {
         'origin': 'test origin',
         'destination': "test destination",
-        "date":"2018-11-12 12:49:00"
+        "date": "2018-11-12 12:49:00"
     }
     post_ride = {
         'origin': 'origin',
         'destination': "test destination",
-        "date":"2019-11-12 12:49:00"
+        "date": "2019-11-12 12:49:00"
     }
-    
+
     def setUp(self):
         self.create_valid_user()
         self.delete_valid_ride()
@@ -41,7 +41,8 @@ class TestBase(unittest.TestCase):
     def delete_valid_user(self):
         """Deletes valid user after tests"""
         connection = psycopg2.connect(
-            "dbname='ride_db' user='postgres' host='localhost' password='15december' port ='5432'")
+            "dbname='ride_db' user='postgres' host='localhost'\
+             password='15december' port ='5432'")
         cursor = connection.cursor()
         cursor.execute("DELETE FROM users WHERE username = %s",
                        (self.valid_user['username'],))
@@ -67,12 +68,13 @@ class TestBase(unittest.TestCase):
     def delete_valid_ride(self):
         """ Deletes the valid ride after tests """
         connection = psycopg2.connect(
-            "dbname='ride_db' user='postgres' host='localhost' password='15december' port ='5432'")
+            "dbname='ride_db' user='postgres' host='localhost'\
+             password='15december' port ='5432'")
         cursor = connection.cursor()
         cursor.execute("DELETE FROM rides WHERE origin = %s",
                        (self.valid_ride['origin'],))
         connection.close()
-    
+
     def create_post_ride(self):
         """ Creates a valid ride to be used for tests """
         response = self.client.post('api/v2/rides/',
@@ -85,17 +87,17 @@ class TestBase(unittest.TestCase):
     def delete_post_ride(self):
         """ Deletes the valid ride after tests """
         connection = psycopg2.connect(
-            "dbname='ride_db' user='postgres' host='localhost' password='15december' port ='5432'")
+            "dbname='ride_db' user='postgres' host='localhost'\
+             password='15december' port ='5432'")
         cursor = connection.cursor()
         cursor.execute("DELETE FROM rides WHERE origin = %s",
                        (self.post_ride['origin'],))
         connection.close()
-    
-
 
     def delete_test_user(self):
         connection = psycopg2.connect(
-            "dbname='ride_db' user='postgres' host='localhost' password='15december' port ='5432'")
+            "dbname='ride_db' user='postgres' host='localhost'\
+             password='15december' port ='5432'")
         cursor = connection.cursor()
         cursor.execute("DELETE FROM users WHERE username = %s", ('username',))
         connection.commit()

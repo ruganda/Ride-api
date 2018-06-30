@@ -4,6 +4,7 @@ from app.models import Ride
 from app.auth.decoractor import token_required
 from app.validate import validate_date, validate_ride
 
+
 class RideAPI(MethodView):
     decorators = [token_required]
 
@@ -14,7 +15,7 @@ class RideAPI(MethodView):
         destination = data['destination']
         date = data['date']
         if validate_date(date) != 'valid':
-            return jsonify({'message':validate_date(date)}), 406
+            return jsonify({'message': validate_date(date)}), 406
         elif validate_ride(data) == 'valid':
             ride = Ride(origin=origin, destination=destination, date=date)
 
@@ -42,7 +43,7 @@ class RideAPI(MethodView):
                     'message': str(e)
                 }
                 return make_response(jsonify(response)), 500
-        return jsonify({'message':validate_ride(data)}), 406
+        return jsonify({'message': validate_ride(data)}), 406
 
     def get(self, current_user, r_id):
         """Method for  get requests"""
