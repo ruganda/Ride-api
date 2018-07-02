@@ -77,11 +77,13 @@ class Ride(Database):
         RIDES = []
         for row in ROWS:
             print(row)
-            RIDES.append({'id': row[0], 'origin': row[1],
-                          'destination': row[2],
-                          'date': row[3], "driver": row[4]
-                          })
-            return RIDES
+            row = {'id': row[0], 'origin': row[1],
+                   'destination': row[2],
+                   'date': row[3], "driver": row[4]
+                   }
+            RIDES.append(row)
+            # print(RIDES)
+        return RIDES
 
     def fetch_all_by_driver(self, driver):
         """ Fetches all ride recods of a driver from the database"""
@@ -94,7 +96,7 @@ class Ride(Database):
                           'destination': row[2],
                           'date': row[3], "driver": row[4]
                           })
-            return RIDES
+        return RIDES
 
 
 class Request(Database):
