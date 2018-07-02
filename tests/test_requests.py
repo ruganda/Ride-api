@@ -15,7 +15,7 @@ class TestRequest(TestBase):
 
     def setUp(self):
         self.create_valid_user()
-        self.create_valid_ride
+        self.create_valid_ride()
 
     # def test_join_request_issuccesful(self):
     #     """Test API can succesfully send a request to join
