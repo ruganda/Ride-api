@@ -32,16 +32,17 @@ Ride-my App is a carpooling application that provides drivers with the ability t
 
     then use the following endpoints to perform the specified tasks
     
-    EndPoint                                    | Functionality
-    ------------------------                    | ----------------------
-    POST /auth/register                         | Create a user account
-    POST /auth/login                            | Log in a user
-    POST /rides/                                | Create an new ride
-    GET /rides/                                 | Retrieves all rides
-    GET /rides/< rideid>                        | Retrives a single ride
-    POST /ride/< rideid >/requests              | Send passenger's request to join a ride
-    GET  /ride/< rideid >/requests              | Retrieve passengers who responded to the ride
-    PUT /api/rides/< irdeid >/requests/< r_id>  | Update an ride
+    EndPoint                                           | Functionality
+    ------------------------                           | ----------------------
+    POST /auth/register                                | Create a user account
+    POST /auth/login                                   | Log in a user
+    POST /users/rides/                                 | Create an new ride
+    GET /rides/                                        | Retrieves all rides
+    GET /users/rides/                                  | Retrieves all rides that are created by the user
+    GET /users/rides/< rideid>                         | Retrives a single ride
+    POST /rides/< rideid >/requests                    | Send passenger's request to join a ride
+    GET  /users/rides/< rideid >/requests              | Retrieve passengers who responded to the ride
+    PUT /users/rides/< irdeid >/requests/< r_id>       | Update an ride
 
     
 **Getting started with the app**
@@ -64,11 +65,11 @@ $ git clone https://github.com/ruganda/Ride-api.git
 ```
 Create a virtual environment. For example, with virtualenv, create a virtual environment named env using
 ```sh
-$ virtualenv env
+$ virtualenv venv
 ```
 Activate the virtual environment
 ```sh
-$ cd envbin/activate.bat
+$ cd venv/scripts/activate.bat
 ```
 Install the dependencies in the requirements.txt file using pip
 ```sh
