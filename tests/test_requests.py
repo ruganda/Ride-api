@@ -11,6 +11,11 @@ class TestRequest(TestBase):
     def setUp(self):
         self.create_valid_user()
         self.create_valid_ride
+        self.delete_post_ride()
+
+    def setUp(self):
+        self.create_valid_user()
+        self.create_valid_ride()
 
     # def test_join_request_issuccesful(self):
     #     """Test API can succesfully send a request to join
@@ -40,7 +45,7 @@ class TestRequest(TestBase):
 
     def test_driver_can_get_all_ride_requests(self):
         """Test API can succesfully get all ride requests (GET request)"""
-        response = self.client.get('api/v2/rides/1/requests',
+        response = self.client.get('api/v2/users/rides/1/requests',
                                    headers={'Authorization':
                                             self.get_token()
                                             })
@@ -48,7 +53,7 @@ class TestRequest(TestBase):
 
     def test_respond_to_request(self):
         """Tests if a driver can respond to a ride request succesfully"""
-        response = self.client.put('api/v2/rides/1/requests/1',
+        response = self.client.put('api/v2/users/rides/1/requests/1',
                                    content_type='application/json',
                                    data=json.dumps({'status': 'accepted'}),
                                    headers={'Authorization':
@@ -58,7 +63,7 @@ class TestRequest(TestBase):
 
     def test_respond_to_request_with_invalid_status(self):
         """Tests sending reponding without accepted/rejected """
-        response = self.client.put('api/v2/rides/1/requests/1',
+        response = self.client.put('api/v2/users/rides/1/requests/1',
                                    content_type='application/json',
                                    data=json.dumps({'status': 'invalid'}),
                                    headers={'Authorization':

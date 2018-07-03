@@ -4,6 +4,7 @@ from app.models import Ride
 from app.auth.decoractor import token_required
 from app.validate import validate_date, validate_ride
 
+
 class RideAPI(MethodView):
     decorators = [token_required]
 
@@ -14,7 +15,7 @@ class RideAPI(MethodView):
         destination = data['destination']
         date = data['date']
         if validate_date(date) != 'valid':
-            return jsonify({'message':validate_date(date)}), 406
+            return jsonify({'message': validate_date(date)}), 406
         elif validate_ride(data) == 'valid':
             ride = Ride(origin=origin, destination=destination, date=date)
 
@@ -42,10 +43,10 @@ class RideAPI(MethodView):
                     'message': str(e)
                 }
                 return make_response(jsonify(response)), 500
-        return jsonify({'message':validate_ride(data)}), 406
+        return jsonify({'message': validate_ride(data)}), 406
 
     def get(self, current_user, r_id):
-        """Method for  get requests"""
+        """Method for passenger to view  rides"""
         if r_id:
             try:
                 ride = Ride(id=r_id)
@@ -72,3 +73,19 @@ class RideAPI(MethodView):
                     'message': str(e)
                 }
                 return make_response(jsonify(response)), 500
+
+
+class DriverAPI(MethodView):
+    """"This class based view handles driver methods"""
+    decorators = [token_required]
+
+    def get(self, current_user):
+        """Helps a driver viell all his  """
+        ride = Ride()
+        driver = current_user[2]
+        RIDES = ride.fetch_all_by_driver(driver)
+        if RIDES == []:
+            return jsonify(
+                {"msg": "You haven't offered any rides yet"
+                 }), 200
+        return jsonify(RIDES), 200

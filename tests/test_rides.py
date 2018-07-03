@@ -30,7 +30,7 @@ class Testride(TestBase):
             'destination': 'a destination',
             "date": "2010-11-12 12:49:00"
         }
-        response = self.client.post('/api/v2/rides/',
+        response = self.client.post('/api/v2/users/rides/',
                                     data=json.dumps(ride),
                                     content_type='application/json',
                                     headers={'Authorization':
@@ -47,14 +47,15 @@ class Testride(TestBase):
             'destination': 'a destination',
             "date": "12-11-2019 "
         }
-        response = self.client.post('/api/v2/rides/',
+        response = self.client.post('/api/v2/users/rides/',
                                     data=json.dumps(ride),
                                     content_type='application/json',
                                     headers={'Authorization':
                                              self.get_token()})
         self.assertEqual(response.status_code, 406)
-        self.assertIn("incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
-                      str(response.data))
+        self.assertIn(
+            "incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
+            str(response.data))
 
     # def test_create_ride_with_valid_details(self):
     #     """ Tests adding a ride with valid details """
@@ -69,7 +70,7 @@ class Testride(TestBase):
             'destination': '',
             'date': ''
         }
-        response = self.client.post('/api/v2/rides/',
+        response = self.client.post('/api/v2/users/rides/',
                                     data=json.dumps(ride),
                                     content_type='application/json',
                                     headers={'Authorization':
@@ -83,7 +84,7 @@ class Testride(TestBase):
             'destination': '@#$%',
             'date': '!@#$'
         }
-        response = self.client.post('/api/v2/rides/',
+        response = self.client.post('/api/v2/users/rides/',
                                     data=json.dumps(ride),
                                     content_type='application/json',
                                     headers={'Authorization':
@@ -108,12 +109,27 @@ class Testride(TestBase):
 
     def test_get_rides_valid_id(self):
         """ Tests querying a rides by a valid ID """
-
-        response = self.client.get('/api/v2/rides/1',
+        self.create_valid_ride()
+        # response = self.client.get('/api/v2/rides/1',
+        #                            headers={'Authorization':
+        #                                     self.get_token()})
+        response = self.client.get('api/v2/rides/',
                                    headers={'Authorization':
-                                            self.get_token()})
+                                            self.get_token()
+                                            })
         self.assertEqual(response.status_code, 200)
-        self.delete_valid_ride()
+        RESULTS = json.loads(response.data.decode())
+        for ride in RESULTS:
+            print(ride)
+            print(RESULTS)
+            response = self.client.get('api/v2/rides/{}'
+                                       .format(ride['id']),
+                                       headers={'Authorization':
+                                                self.get_token()
+                                                })
+            self.assertEqual(response.status_code, 200)
+        # self.assertEqual(response.status_code, 200)
+            self.delete_valid_ride()
 
     def test_rides_view_with_invalid_id(self):
         """ Tests querying for a ride with a none existent ID """

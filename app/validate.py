@@ -4,14 +4,13 @@ import re
 
 def validate_user(data):
     """validates the user and return appropriate message"""
-    if not data['name'].strip() or not data['username'].strip() or not data['password'].strip():
+    if not data['name'].strip() or not data['username'].strip()\
+            or not data['password'].strip():
         return "all fields are required"
-    elif not re.match("^[a-zA-Z0-9_ ]*$", data['name'].strip()):
-        return "Name should only contain alphanemeric characters"
-    elif not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
-        return "username should only contain alphanemeric characters"
-    elif not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
-        return "Password should only contain alphanemeric characters "
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['name'].strip()) or\
+            not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()) or\
+            not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
+        return "Inputs should only contain alphanemeric characters"
     else:
         return 'valid'
 
@@ -20,22 +19,21 @@ def validate_login(data):
     """validates the user and return appropriate message"""
     if not data['username'].strip() or not data['password'].strip():
         return "all fields are required"
-    elif not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()):
-        return "username should only contain alphanemeric characters"
-    elif not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
-        return "Password should only contain alphanemeric characters "
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['username'].strip()) or\
+            not re.match("^[a-zA-Z0-9_]*$", data['password'].strip()):
+        return "Inputs should only contain alphanemeric characters"
     else:
         return 'valid'
 
 
 def validate_ride(data):
     """validates the rides inputs and return appropriate message"""
-    if not 'origin' in data or not 'destination' in data or not 'date' in data:
+    if not data['origin'].strip() or not data['destination'].strip() or\
+            not data['date'].strip():
         return "all fields are required"
-    elif not re.match("^[a-zA-Z0-9_ ]*$", data['origin'].strip()):
+    elif not re.match("^[a-zA-Z0-9_ ]*$", data['origin'].strip()) or\
+            not re.match("^[a-zA-Z0-9_ ]*$", data['destination'].strip()):
         return "ride origin should only contain alphanemeric characters "
-    elif not re.match("^[a-zA-Z0-9_ ]*$", data['destination'].strip()):
-        return "ride location should only contain alphanemeric characters"
     else:
         return 'valid'
 

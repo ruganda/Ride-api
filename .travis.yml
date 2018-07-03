@@ -4,6 +4,7 @@ python:
 install:
   - "pip install -r requirements.txt"
   - "pip install coverage"
+  - "pip install coveralls"
 services:
   - postgresql
 before_script:
@@ -12,4 +13,3 @@ before_script:
 script:
     - nosetests --with-coverage --cover-erase --cover-package=app/ && coverage report
 after_success: coveralls
-    
