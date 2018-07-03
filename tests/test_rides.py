@@ -7,7 +7,6 @@ class Testride(TestBase):
 
     def setUp(self):
         self.create_valid_user()
-        self.delete_post_ride()
 
     def test_accessing_ride_view_without_token(self):
         """ Tests accessing the ride endpoint without a token """
@@ -57,11 +56,10 @@ class Testride(TestBase):
             "incorrect date and time format, should be YYYY-MM-DD HH:MM:SS",
             str(response.data))
 
-    # def test_create_ride_with_valid_details(self):
-    #     """ Tests adding a ride with valid details """
-    #     response = self.create_post_ride()
-    #     self.assertEqual(response.status_code, 201)
-    #     self.delete_post_ride()
+    def test_create_ride_with_valid_details(self):
+        """ Tests adding a ride with valid details """
+        response = self.create_post_ride()
+        self.assertEqual(response.status_code, 201)
 
     def test_create_ride_with_blank_attributes(self):
         """ Tests creating a ride with a blank origin or destination """
@@ -96,7 +94,6 @@ class Testride(TestBase):
         self.create_valid_ride()
         response = self.create_valid_ride()
         self.assertEqual(response.status_code, 409)
-        self.delete_valid_ride()
 
     def test_get_rides(self):
         """ Tests fetching all rides  """
@@ -105,7 +102,6 @@ class Testride(TestBase):
                                    headers={'Authorization':
                                             self.get_token()})
         self.assertEqual(response.status_code, 200)
-        self.delete_valid_ride()
 
     def test_get_rides_valid_id(self):
         """ Tests querying a rides by a valid ID """
@@ -129,7 +125,6 @@ class Testride(TestBase):
                                                 })
             self.assertEqual(response.status_code, 200)
         # self.assertEqual(response.status_code, 200)
-            self.delete_valid_ride()
 
     def test_rides_view_with_invalid_id(self):
         """ Tests querying for a ride with a none existent ID """
@@ -139,5 +134,4 @@ class Testride(TestBase):
         self.assertEqual(response.status_code, 404)
 
     def tearDown(self):
-        self.delete_valid_user()
-        self.delete_post_ride()
+        pass

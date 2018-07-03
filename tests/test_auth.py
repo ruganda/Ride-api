@@ -7,8 +7,7 @@ from test_base import TestBase
 class TestAuth(TestBase):
 
     def setUp(self):
-        self.delete_valid_user()
-        self.delete_test_user()
+        pass
 
     def test_register_valid_details(self):
         """ Tests creating a new user with valid details """
@@ -61,7 +60,6 @@ class TestAuth(TestBase):
         response = self.create_valid_user()
         self.assertEqual(response.status_code, 409)
         self.assertIn("User already exists. Please login.", str(response.data))
-        self.delete_valid_user()
 
     def test_login_valid_credentials(self):
         """ Tests login with valid credentials """

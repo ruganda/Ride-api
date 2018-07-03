@@ -10,23 +10,18 @@ class TestRequest(TestBase):
 
     def setUp(self):
         self.create_valid_user()
-        self.create_valid_ride
-        self.delete_post_ride()
-
-    def setUp(self):
-        self.create_valid_user()
         self.create_valid_ride()
 
-    # def test_join_request_issuccesful(self):
-    #     """Test API can succesfully send a request to join
-    #     a ride (POST request)"""
-    #     response = self.client.post('api/v2/rides/1/requests',
-    #                                 content_type='application/json',
-    #                                 headers={'Authorization':
-    #                                          self.get_token()
-    #                                          })
+    def test_join_request_issuccesful(self):
+        """Test API can succesfully send a request to join
+        a ride (POST request)"""
+        response = self.client.post('api/v2/rides/1/requests',
+                                    content_type='application/json',
+                                    headers={'Authorization':
+                                             self.get_token()
+                                             })
 
-    #     self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 201)
 
     def test_send_duplicate_ride(self):
         """Test send a duplicate ride request"""

@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from flask.views import MethodView
 from flask import jsonify, request, make_response
-from app.models import User
+from flask import current_app as app
+from app.models import Database, User
 from app.validate import validate_user, validate_login
 
 
@@ -12,6 +13,9 @@ class RegistrationView(MethodView):
 
     def post(self):
         """registers a user"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         data = request.get_json()
         validate = validate_user(data)
         if validate == 'valid':
@@ -55,6 +59,9 @@ class LoginView(MethodView):
 
     def post(self):
         '''Logs in a registered user and returns a token'''
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         data = request.get_json()
         validate = validate_login(data)
         if validate == 'valid':
