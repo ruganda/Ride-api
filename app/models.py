@@ -3,7 +3,10 @@ from app import create_app
 from flask import current_app as app
 from urllib.parse import urlparse
 
+
 class Database:
+    """This class does all database related stuff"""
+
     def __init__(self, database_url):
         parsed_url = urlparse(database_url)
         db = parsed_url.path[1:]
@@ -11,23 +14,11 @@ class Database:
         hostname = parsed_url.hostname
         password = parsed_url.password
         port = parsed_url.port
-       
+
         self.conn = psycopg2.connect(
             database=db, user=username, password=password, host=hostname, port=port)
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
-        
-
-# class Database:
-#     """This class does all database related stuff"""
-
-#     def __init__(self, db="ride_db"):
-#         '''Initiates a database connection'''
-#         self.conn = psycopg2.connect(
-#             "dbname='{}' user='postgres' host = 'localhost'\
-#             password='15december' port='5432'".format(db)
-#         )
-#         self.cur = self.conn.cursor()
 
     def create_tables(self):
         """Creates database tables """
@@ -47,8 +38,13 @@ class Database:
         self.conn.commit()
         self.conn.close()
 
+    def trancate_table(self, table):
+        """Trancates the table"""
+        self.cur.execute("TRUNCATE TABLE {} RESTART IDENTITY".format(table))
+
 
 class User(Database):
+    """This class does all database related stuff for the user"""
 
     def __init__(self, user_id=0, name=None, username=None, password=None):
         Database.__init__(self, app.config['DATABASE_URL'])
