@@ -18,7 +18,7 @@ class RequestAPI(MethodView):
         if ride_id:
             """ first check if the person making a request is the driver/owner
                 if the owner wants to respond to his own ride . stop him.
-            """"
+            """
         ride = Ride(id=ride_id)
         the_ride = ride.find_by_id(ride_id)
         if the_ride is None:
