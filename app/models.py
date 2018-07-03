@@ -85,7 +85,7 @@ class Ride(Database):
     def find_by_id(self, r_id):
         """selects a single ride by id from the database"""
         self.cur.execute(
-            "SELECT * FROM rides WHERE id = %(id)s", {'id': r_id})
+            "SELECT * FROM rides WHERE id = '{}'".format(r_id))
 
         row = self.cur.fetchone()
         if row:
@@ -96,9 +96,9 @@ class Ride(Database):
     def insert(self, driver):
         """Insert a new ride record to the database"""
         query = "INSERT INTO rides (origin, destination, date, driver)\
-         VALUES(%s, %s, %s, %s)"
-        self.cur.execute(query, (self.origin, self.destination,
-                                 self.date, driver))
+         VALUES('{}', '{}', '{}', '{}');".format(self.origin, self.destination,
+                                                 self.date, driver)
+        self.cur.execute(query)
         self.conn.commit()
 
     def fetch_all(self):
@@ -118,8 +118,8 @@ class Ride(Database):
 
     def fetch_all_by_driver(self, driver):
         """ Fetches all ride recods of a driver from the database"""
-        self.cur.execute("SELECT * FROM rides WHERE driver = %(driver)s",
-                         {'driver': driver})
+        self.cur.execute("SELECT * FROM rides WHERE driver = '{}'"
+                         .format(driver))
         ROWS = self.cur.fetchall()
         RIDES = []
         for row in ROWS:
@@ -142,6 +142,7 @@ class Request(Database):
         self.passenger = passenger
 
     def insert(self, r_id, passenger):
+        """creates a new request record to the database"""
         query = "INSERT INTO requests (ride_id, status, passenger)\
          VALUES('{}','{}', '{}');"\
             .format(r_id, self.status, passenger)
@@ -149,9 +150,9 @@ class Request(Database):
         self.conn.commit()
 
     def find_by_id(self, r_id):
+        """ Gets a ride by id from the requests table"""
         self.cur.execute(
-            "SELECT * FROM requests WHERE ride_id = %(ride_id)s",
-            {'ride_id': r_id})
+            "SELECT * FROM requests WHERE ride_id = '{}'".format(r_id))
         rows = self.cur.fetchall()
         REQUESTS = []
         for row in rows:
@@ -161,6 +162,6 @@ class Request(Database):
 
     def update_request(self, rId, data):
         '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
-                         (data['status'], rId))
+        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'".format(data['status'], rId))
+                        
         self.conn.commit()
