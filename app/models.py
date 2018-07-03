@@ -16,7 +16,8 @@ class Database:
         port = parsed_url.port
 
         self.conn = psycopg2.connect(
-            database=db, user=username, password=password, host=hostname, port=port)
+            database=db, user=username, password=password,
+            host=hostname, port=port)
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
 
@@ -162,6 +163,7 @@ class Request(Database):
 
     def update_request(self, rId, data):
         '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'".format(data['status'], rId))
-                        
+        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
+                         .format(data['status'], rId))
+
         self.conn.commit()
