@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from flask.views import MethodView
 from flask import jsonify, request, make_response
-from app.models import User
+from flask import current_app as app
+from app.models import Database, User
 from app.validate import validate_user, validate_login
 
 
@@ -12,6 +13,9 @@ class RegistrationView(MethodView):
 
     def post(self):
         """registers a user"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         data = request.get_json()
         validate = validate_user(data)
         if validate == 'valid':
@@ -26,11 +30,12 @@ class RegistrationView(MethodView):
                     username = data['username']
                     password = data['password']
                     user = User(name=name, username=username,
-                                password=generate_password_hash(password, method='sha256'))
+                                password=generate_password_hash
+                                (password, method='sha256'))
                     user.insert_data(user)
 
                     response = {
-                        'message': 'You registered successfully. Please login.',
+                        'message': 'You registered successfully. Please login.'
                     }
                     return make_response(jsonify(response)), 201
 
@@ -54,26 +59,35 @@ class LoginView(MethodView):
 
     def post(self):
         '''Logs in a registered user and returns a token'''
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         data = request.get_json()
         validate = validate_login(data)
         if validate == 'valid':
             try:
                 user = User(data['username'], data['password'])
                 user_object = user.get_single_user(data['username'])
-                if user_object == None:
+                if user_object is None:
                     response = {
-                        'message': 'user not found , please register an account to continue.'
+                        'message': 'user not found ,' +
+                        ' please register an account to continue.'
                     }
                     return make_response(jsonify(response)), 401
 
                 current_user = User(
                     username=user_object[2], password=user_object[3])
 
-                if current_user and current_user.username == data['username'] and \
-                        check_password_hash(current_user.password, data['password']):
+                if current_user and\
+                        current_user.username == data['username'] and\
+                        check_password_hash(current_user.password,
+                                            data['password']):
                     # Generate the access token
-                    token = jwt.encode({'username': current_user.username, 'exp': datetime.utcnow()
-                                        + timedelta(days=10, minutes=60)}, 'donttouch')
+                    token = jwt.encode(
+                        {'username': current_user.username,
+                         'exp': datetime.utcnow() +
+                         timedelta(days=10, minutes=60)
+                         }, 'donttouch')
                     if token:
                         response = {
                             'message': 'You logged in successfully.',
@@ -83,7 +97,8 @@ class LoginView(MethodView):
                 else:
 
                     response = {
-                        'message': 'Invalid username or password, Please try again.'
+                        'message': 'Invalid username or password,' +
+                        ' Please try again.'
                     }
                     return make_response(jsonify(response)), 403
             except Exception as e:
