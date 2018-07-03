@@ -1,7 +1,9 @@
+"""This module handles RequestApi class and its methods"""
 from flask import jsonify, make_response, request, abort
 from flask.views import MethodView
 from app.auth.decoractor import token_required
-from app.models import Request, Ride
+from app.models import Database, Request, Ride
+from flask import current_app as app
 
 
 class RequestAPI(MethodView):
@@ -9,6 +11,10 @@ class RequestAPI(MethodView):
     decorators = [token_required]
 
     def post(self, current_user, ride_id):
+        """Post method view for requesting a ride"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         if ride_id:
             try:
                 request = Request(ride_id=ride_id)
@@ -34,6 +40,9 @@ class RequestAPI(MethodView):
 
     def get(self, current_user, ride_id):
         '''Gets all ride requests for a specific ride'''
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         # first check if the ride was created by the logged in driver
         ride = Ride(id=ride_id)
         the_ride = ride.find_by_id(ride_id)
@@ -55,6 +64,9 @@ class RequestAPI(MethodView):
 
     def put(self, current_user, ride_id, request_id):
         """Accept or reject a ride request"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         # first check if the ride was created by the logged in driver
         ride = Ride(id=ride_id)
         the_ride = ride.find_by_id(ride_id)

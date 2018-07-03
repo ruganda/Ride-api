@@ -1,8 +1,9 @@
 from flask.views import MethodView
 from flask import jsonify, request, abort, make_response
-from app.models import Ride
+from app.models import Database, Ride
 from app.auth.decoractor import token_required
 from app.validate import validate_date, validate_ride
+from flask import current_app as app
 
 
 class RideAPI(MethodView):
@@ -10,13 +11,19 @@ class RideAPI(MethodView):
 
     def post(self, current_user):
         """offers a new ride"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         data = request.json
         origin = data['origin']
         destination = data['destination']
         date = data['date']
+
         if validate_date(date) != 'valid':
             return jsonify({'message': validate_date(date)}), 406
+
         elif validate_ride(data) == 'valid':
+
             ride = Ride(origin=origin, destination=destination, date=date)
 
             try:
@@ -47,6 +54,9 @@ class RideAPI(MethodView):
 
     def get(self, current_user, r_id):
         """Method for passenger to view  rides"""
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         if r_id:
             try:
                 ride = Ride(id=r_id)
@@ -81,6 +91,9 @@ class DriverAPI(MethodView):
 
     def get(self, current_user):
         """Helps a driver viell all his  """
+        database = Database(app.config['DATABASE_URL'])
+        database.create_tables()
+
         ride = Ride()
         driver = current_user[2]
         RIDES = ride.fetch_all_by_driver(driver)

@@ -1,22 +1,57 @@
 import psycopg2
-
+from app import create_app
+from flask import current_app as app
+from urllib.parse import urlparse
 
 class Database:
-    """This class does all database related stuff"""
-
-    def __init__(self):
-        '''Initiates a database connection'''
+    def __init__(self, database_url):
+        parsed_url = urlparse(database_url)
+        db = parsed_url.path[1:]
+        username = parsed_url.username
+        hostname = parsed_url.hostname
+        password = parsed_url.password
+        port = parsed_url.port
+       
         self.conn = psycopg2.connect(
-            "dbname='ride_db' user='postgres' host = 'localhost'\
-             password='15december' port='5432'"
-        )
+            database=db, user=username, password=password, host=hostname, port=port)
+        self.conn.autocommit = True
         self.cur = self.conn.cursor()
+        
+
+# class Database:
+#     """This class does all database related stuff"""
+
+#     def __init__(self, db="ride_db"):
+#         '''Initiates a database connection'''
+#         self.conn = psycopg2.connect(
+#             "dbname='{}' user='postgres' host = 'localhost'\
+#             password='15december' port='5432'".format(db)
+#         )
+#         self.cur = self.conn.cursor()
+
+    def create_tables(self):
+        """Creates database tables """
+        create_table = "CREATE TABLE IF NOT EXISTS users\
+        (id SERIAL PRIMARY KEY, name text, username text, password text,\
+        rides_taken INTEGER, rides_given INTEGER)"
+        self.cur.execute(create_table)
+
+        create_table = "CREATE TABLE IF NOT EXISTS rides\
+        (id SERIAL PRIMARY KEY, origin text, destination\
+        text, date TIMESTAMP NOT NULL, driver text)"
+        self.cur.execute(create_table)
+
+        create_table = "CREATE TABLE IF NOT EXISTS requests\
+        (id SERIAL PRIMARY KEY, ride_id INTEGER, status text, passenger text)"
+        self.cur.execute(create_table)
+        self.conn.commit()
+        self.conn.close()
 
 
 class User(Database):
 
     def __init__(self, user_id=0, name=None, username=None, password=None):
-        Database.__init__(self)
+        Database.__init__(self, app.config['DATABASE_URL'])
         self.user_id = user_id
         self.name = name
         self.username = username
@@ -45,7 +80,7 @@ class Ride(Database):
 
     def __init__(self, id=None, origin=None, destination=None, date=None):
         ''' Initializes the ride object'''
-        self.instance = Database.__init__(self)
+        Database.__init__(self, app.config['DATABASE_URL'])
         self.id = id
         self.origin = origin
         self.destination = destination
@@ -104,7 +139,7 @@ class Request(Database):
 
     def __init__(self, id=None, ride_id=None, status="requested",
                  passenger=None):
-        Database.__init__(self)
+        Database.__init__(self, app.config['DATABASE_URL'])
         self.id = id
         self.ride_id = ride_id
         self.status = status
