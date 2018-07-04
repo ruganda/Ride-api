@@ -11,6 +11,12 @@ class TestBase(unittest.TestCase):
     app.app_context().push()
     client = app.test_client()
 
+    passenger = {
+        'name': 'passenger name',
+        'username': 'passenger',
+        'password': 'password'
+    }
+
     valid_user = {
         'name': 'TestUser',
         'username': 'validuser',
@@ -30,7 +36,6 @@ class TestBase(unittest.TestCase):
 
     def setUp(self):
         self.create_valid_user()
-        self.delete_valid_ride()
 
     def create_valid_user(self):
         """ Registers a user to be used for tests"""
@@ -64,6 +69,23 @@ class TestBase(unittest.TestCase):
                                     headers={'Authorization':
                                              self.get_token()})
         return response
+
+    def create_passenger(self):
+        """ Registers a user to be used for tests"""
+        response = self.client.post('/api/v2/auth/register',
+                                    data=json.dumps(self.passenger),
+                                    content_type='application/json')
+        return response
+
+    def passenger_token(self):
+        ''' Generates a toke to be used for tests'''
+        response = self.client.post('/api/v2/auth/login',
+                                    data=json.dumps({
+                                        'username': 'passenger',
+                                        'password': 'password'}),
+                                    content_type='application/json')
+        data = json.loads(response.data.decode())
+        return data['token']
 
     def tearDown(self):
         db = Database(

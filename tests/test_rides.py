@@ -60,6 +60,9 @@ class Testride(TestBase):
         """ Tests adding a ride with valid details """
         response = self.create_post_ride()
         self.assertEqual(response.status_code, 201)
+        self.assertIn(
+            'You offered a ride successfully.',
+            str(response.data))
 
     def test_create_ride_with_blank_attributes(self):
         """ Tests creating a ride with a blank origin or destination """
@@ -106,9 +109,6 @@ class Testride(TestBase):
     def test_get_rides_valid_id(self):
         """ Tests querying a rides by a valid ID """
         self.create_valid_ride()
-        # response = self.client.get('/api/v2/rides/1',
-        #                            headers={'Authorization':
-        #                                     self.get_token()})
         response = self.client.get('api/v2/rides/',
                                    headers={'Authorization':
                                             self.get_token()
@@ -124,7 +124,6 @@ class Testride(TestBase):
                                                 self.get_token()
                                                 })
             self.assertEqual(response.status_code, 200)
-        # self.assertEqual(response.status_code, 200)
 
     def test_rides_view_with_invalid_id(self):
         """ Tests querying for a ride with a none existent ID """
@@ -132,6 +131,27 @@ class Testride(TestBase):
                                    headers={'Authorization':
                                             self.get_token()})
         self.assertEqual(response.status_code, 404)
+
+    def test_get_all_rides_for_a_specific_user_with_no_rides(self):
+        """ Tests fetching all rides for a specifc user who hasn't
+        created any rides
+          """
+        self.create_passenger()
+        response = self.client.get('/api/v2/users/rides/',
+                                   headers={'Authorization':
+                                            self.passenger_token()})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            "You have not offered any rides yet",
+            str(response.data))
+
+    def test_get_all_rides_for_a_specific_user(self):
+        """ Tests fetching all rides for a specifc user  """
+        self.create_valid_ride()
+        response = self.client.get('/api/v2/users/rides/',
+                                   headers={'Authorization':
+                                            self.get_token()})
+        self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
         pass

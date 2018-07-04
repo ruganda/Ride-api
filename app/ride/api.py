@@ -99,6 +99,6 @@ class DriverAPI(MethodView):
         RIDES = ride.fetch_all_by_driver(driver)
         if RIDES == []:
             return jsonify(
-                {"msg": "You haven't offered any rides yet"
+                {"msg": "You have not offered any rides yet"
                  }), 200
         return jsonify(RIDES), 200
