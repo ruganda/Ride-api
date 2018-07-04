@@ -1,3 +1,4 @@
+"""creates a token required decorator help in securing endpoints"""
 from functools import wraps
 from flask import request, jsonify
 import jwt
@@ -5,9 +6,10 @@ from app.models import User
 
 
 def token_required(f):
+    """This the fuction to be decorated"""
     @wraps(f)
     def decorated(*args, **kwargs):
-
+        """creates thr decorator"""
         token = None
 
         if 'Authorization' in request.headers:

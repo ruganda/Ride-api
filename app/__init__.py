@@ -1,3 +1,4 @@
+"""Creates module is the main application factory"""
 from flask import Flask
 from config import app_config
 
@@ -8,11 +9,11 @@ def create_app(config_name):
     """
     app = Flask(__name__)
     app.config.from_object(app_config[config_name])
-    from app.request.views import request_app
-    from app.ride.views import ride_app
-    from app.auth.views import auth_blueprint
+    from app.request.views import REQUEST_APP
+    from app.ride.views import RIDE_APP
+    from app.auth.views import AUTH_BLUEPRINT
     # register_blueprint
-    app.register_blueprint(auth_blueprint)
-    app.register_blueprint(ride_app)
-    app.register_blueprint(request_app)
+    app.register_blueprint(AUTH_BLUEPRINT)
+    app.register_blueprint(RIDE_APP)
+    app.register_blueprint(REQUEST_APP)
     return app
