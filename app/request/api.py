@@ -1,9 +1,8 @@
 """This module handles RequestApi class and its methods"""
-from flask import jsonify, make_response, request, abort
+from flask import jsonify, make_response, request, abort, current_app as app
 from flask.views import MethodView
-from app.auth.decoractor import token_required
 from app.models import Database, Request, Ride
-from flask import current_app as app
+from app.auth.decoractor import token_required
 
 
 class RequestAPI(MethodView):
@@ -26,9 +25,9 @@ class RequestAPI(MethodView):
         if the_ride['driver'] != current_user[2]:
 
             try:
-                request = Request(ride_id=ride_id)
+                a_request = Request(ride_id=ride_id)
                 passenger = current_user[2]
-                all_reqs = request.find_by_id(ride_id)
+                all_reqs = a_request.find_by_id(ride_id)
                 for req in all_reqs:
                     req = {"Id": req['Id'], "ride_id": req['ride_id'],
                            "status": req['status'],
@@ -37,7 +36,7 @@ class RequestAPI(MethodView):
                         return jsonify({'msg': 'You already requested' +
                                         ' to join this ride'}), 409
 
-                request.insert(ride_id, passenger)
+                a_request.insert(ride_id, passenger)
                 return jsonify({'msg': 'A request to join this ride' +
                                 " has been sent"}), 201
 

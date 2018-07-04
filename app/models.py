@@ -1,7 +1,7 @@
-import psycopg2
-from app import create_app
-from flask import current_app as app
+"""This module handles database queries"""
 from urllib.parse import urlparse
+import psycopg2
+from flask import current_app as app
 
 
 class Database:
@@ -9,14 +9,14 @@ class Database:
 
     def __init__(self, database_url):
         parsed_url = urlparse(database_url)
-        db = parsed_url.path[1:]
+        d_b = parsed_url.path[1:]
         username = parsed_url.username
         hostname = parsed_url.hostname
         password = parsed_url.password
         port = parsed_url.port
 
         self.conn = psycopg2.connect(
-            database=db, user=username, password=password,
+            database=d_b, user=username, password=password,
             host=hostname, port=port)
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
@@ -57,6 +57,7 @@ class User(Database):
         self.rides_taken = 0
 
     def get_single_user(self, username):
+        """Gets a single user by id from the database"""
         self.cur.execute(
             "SELECT * FROM users WHERE username = '{}'".format(username))
         user = self.cur.fetchone()
@@ -90,9 +91,9 @@ class Ride(Database):
 
         row = self.cur.fetchone()
         if row:
-            RIDE = {'id': row[0], 'origin': row[1],
+            ride = {'id': row[0], 'origin': row[1],
                     'destination': row[2], 'date': row[3], "driver": row[4]}
-            return RIDE
+            return ride
 
     def insert(self, driver):
         """Insert a new ride record to the database"""
@@ -105,30 +106,28 @@ class Ride(Database):
     def fetch_all(self):
         """ Fetches all ride recods from the database"""
         self.cur.execute("SELECT * FROM rides ")
-        ROWS = self.cur.fetchall()
-        RIDES = []
-        for row in ROWS:
-            print(row)
+        rows = self.cur.fetchall()
+        rides = []
+        for row in rows:
             row = {'id': row[0], 'origin': row[1],
                    'destination': row[2],
                    'date': row[3], "driver": row[4]
                    }
-            RIDES.append(row)
-            # print(RIDES)
-        return RIDES
+            rides.append(row)
+        return rides
 
     def fetch_all_by_driver(self, driver):
         """ Fetches all ride recods of a driver from the database"""
         self.cur.execute("SELECT * FROM rides WHERE driver = '{}'"
                          .format(driver))
-        ROWS = self.cur.fetchall()
-        RIDES = []
-        for row in ROWS:
-            RIDES.append({'id': row[0], 'origin': row[1],
+        rows = self.cur.fetchall()
+        rides = []
+        for row in rows:
+            rides.append({'id': row[0], 'origin': row[1],
                           'destination': row[2],
                           'date': row[3], "driver": row[4]
                           })
-        return RIDES
+        return rides
 
 
 class Request(Database):
@@ -155,15 +154,15 @@ class Request(Database):
         self.cur.execute(
             "SELECT * FROM requests WHERE ride_id = '{}'".format(r_id))
         rows = self.cur.fetchall()
-        REQUESTS = []
+        requests = []
         for row in rows:
-            REQUESTS.append({'Id': row[0], 'ride_id': row[1],
+            requests.append({'Id': row[0], 'ride_id': row[1],
                              'status': row[2], 'passenger': row[3]})
-        return REQUESTS
+        return requests
 
-    def update_request(self, rId, data):
+    def update_request(self, r_id, data):
         '''Updates the status in the database'''
         self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
-                         .format(data['status'], rId))
+                         .format(data['status'], r_id))
 
         self.conn.commit()

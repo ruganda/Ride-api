@@ -1,12 +1,13 @@
+"""Handles rides class based views"""
 from flask.views import MethodView
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, make_response, current_app as app
 from app.models import Database, Ride
 from app.auth.decoractor import token_required
 from app.validate import validate_date, validate_ride
-from flask import current_app as app
 
 
 class RideAPI(MethodView):
+    """A class based view to handle rides"""
     decorators = [token_required]
 
     def post(self, current_user):

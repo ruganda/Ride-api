@@ -1,3 +1,4 @@
+"""This module contain functions that handle input validation"""
 from datetime import datetime
 import re
 
