@@ -22,17 +22,23 @@ class RideAPI(MethodView):
         elif validate_ride(data) == 'valid':
 
             driver = current_user.username
-            ride_query = database.get_argument(
-                table='rides', column=driver, arg=driver)
 
-            if ride_query is None:
-                database.insert_ride_data(data, driver)
-                response = {
-                    'message': 'You offered a ride successfully.',
-                }
-                return make_response(jsonify(response)), 201
-
-            return jsonify({'message': 'Ride already exists'}), 409
+            rides_query = database.fetch_all()
+            print(rides_query)
+            for ride in rides_query:
+                if ride['origin'] == data['origin'] and \
+                        ride['destination'] == data['destination']\
+                        and str(ride['date']) == str(data['date']) and \
+                        ride['driver'] == current_user.username:
+                    response = {
+                        'message': 'This ride already exists.',
+                    }
+                    return make_response(jsonify(response)), 409
+            database.insert_ride_data(data, driver)
+            response = {
+                'message': 'You offered a ride successfully.',
+            }
+            return make_response(jsonify(response)), 201
 
     def get(self, current_user, ride_id):
         """Method for passenger to view  rides"""

@@ -9,6 +9,7 @@ class Database:
     """This class does all database related stuff"""
 
     def __init__(self, database_url):
+        """Initializes the connection url"""
         parsed_url = urlparse(database_url)
         d_b = parsed_url.path[1:]
         username = parsed_url.username
@@ -42,17 +43,6 @@ class Database:
     def trancate_table(self, table):
         """Trancates the table"""
         self.cur.execute("TRUNCATE TABLE {} RESTART IDENTITY".format(table))
-
-    def get_argument(self, table, column, arg):
-        """
-        Gets an urgument from the database column from a given table
-        """
-        self.cur.execute(
-            "SELECT * FROM {} WHERE '{}' = '{}'"
-            .format(table, column, arg))
-
-        arg_object = self.cur.fetchone()
-        return arg_object
 
     def fetch_all(self):
         """ Fetches all ride recods from the database"""
@@ -120,6 +110,7 @@ class Database:
         """selects a single ride by id from the database"""
         self.cur.execute(
             "SELECT * FROM rides WHERE id = '{}'".format(r_id))
+
         row = self.cur.fetchone()
         return row
 
@@ -127,7 +118,8 @@ class Database:
         """ Gets a ride by id from the requests table"""
         self.cur.execute(
             "SELECT * FROM requests WHERE ride_id = '{}'".format(r_id))
-        rows = self.cur.fetchone()
+        row = self.cur.fetchone()
+        return row
 
     def find_by_id(self, r_id):
         """selects a single ride by id from the database"""

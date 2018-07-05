@@ -45,7 +45,7 @@ class RequestAPI(MethodView):
             abort(404)
 
         ride = Ride(query[0], query[1], query[2], query[3], query[4])
-        if ride.driver != driver:
+        if ride.driver == driver:
 
             ride_requests = database.fetch_by_id(ride_id)
             if ride_requests == []:
@@ -58,26 +58,26 @@ class RequestAPI(MethodView):
         """Accept or reject a ride request"""
         database = Database(app.config['DATABASE_URL'])
         # first check if the ride was created by the logged in driver
-        # driver = current_user.username
-        # query = database.find_by_id(ride_id)
-        # if query is None:
-        #     abort(404)
+        driver = current_user.username
+        query = database.find_by_id(ride_id)
+        if query is None:
+            abort(404)
 
-        # ride = Ride(query[0], query[1], query[2], query[3], query[4])
-        # if ride.driver != driver:
-        data = request.get_json()
-        if data['status'] == 'accepted' or data['status'] == 'rejected':
+        ride = Ride(query[0], query[1], query[2], query[3], query[4])
+        if ride.driver == driver:
+            data = request.get_json()
+            if data['status'] == 'accepted' or data['status'] == 'rejected':
 
-            database.update_request(ride_id, data)
+                database.update_request(ride_id, data)
+                response = {
+                    'message': 'you have {} this ride request'
+                    .format(data['status'])
+                }
+                return make_response(jsonify(response)), 200
+
             response = {
-                'message': 'you have {} this ride request'
-                .format(data['status'])
+                'message': 'The status can only be in 3 states,' +
+                'requested, accepted and rejected'
             }
-            return make_response(jsonify(response)), 200
-
-        response = {
-            'message': 'The status can only be in 3 states,' +
-            'requested, accepted and rejected'
-        }
-        return make_response(jsonify(response)), 406
-        # abort(404)
+            return make_response(jsonify(response)), 406
+        abort(404)
