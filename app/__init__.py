@@ -1,7 +1,7 @@
 """Creates module is the main application factory"""
 from flask import Flask
 from config import app_config
-
+from app.database import Database
 
 def create_app(config_name):
     """Creates the application and registers the blueprints
@@ -17,3 +17,4 @@ def create_app(config_name):
     app.register_blueprint(RIDE_APP)
     app.register_blueprint(REQUEST_APP)
     return app
+

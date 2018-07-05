@@ -2,7 +2,7 @@ import unittest
 import psycopg2
 from flask import json
 from app import create_app
-from app.models import Database
+from app.database import Database
 
 
 class TestBase(unittest.TestCase):
@@ -35,6 +35,9 @@ class TestBase(unittest.TestCase):
     }
 
     def setUp(self):
+        db = Database(
+            'postgresql://postgres:15december@localhost:5432/test_db')
+        db.create_tables()
         self.create_valid_user()
 
     def create_valid_user(self):

@@ -1,8 +1,9 @@
 """creates a token required decorator help in securing endpoints"""
 from functools import wraps
-from flask import request, jsonify
+from flask import request, jsonify, current_app as app
 import jwt
 from app.models import User
+from app.database import Database
 
 
 def token_required(f):
@@ -20,8 +21,10 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, 'donttouch')
-            user = User(data['username'])
-            current_user = user.get_single_user(data['username'])
+            # user = User(data['username'])
+            database = Database(app.config['DATABASE_URL'])
+            query = database.fetch_single_user(data['username'])
+            current_user = User(query[0], query[1], query[2], query[3])
         except:
             return jsonify({'message': 'Token is invalid!'}), 401
 

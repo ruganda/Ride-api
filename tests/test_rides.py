@@ -131,27 +131,3 @@ class Testride(TestBase):
                                    headers={'Authorization':
                                             self.get_token()})
         self.assertEqual(response.status_code, 404)
-
-    def test_get_all_rides_for_a_specific_user_with_no_rides(self):
-        """ Tests fetching all rides for a specifc user who hasn't
-        created any rides
-          """
-        self.create_passenger()
-        response = self.client.get('/api/v2/users/rides/',
-                                   headers={'Authorization':
-                                            self.passenger_token()})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(
-            "You have not offered any rides yet",
-            str(response.data))
-
-    def test_get_all_rides_for_a_specific_user(self):
-        """ Tests fetching all rides for a specifc user  """
-        self.create_valid_ride()
-        response = self.client.get('/api/v2/users/rides/',
-                                   headers={'Authorization':
-                                            self.get_token()})
-        self.assertEqual(response.status_code, 200)
-
-    def tearDown(self):
-        pass

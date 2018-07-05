@@ -58,14 +58,6 @@ class TestRequest(TestBase):
                                             })
         self.assertEqual(response.status_code, 404)
 
-    def test_driver_can_get_all_ride_requests(self):
-        """Test API can succesfully get all ride requests (GET request)"""
-        response = self.client.get('api/v2/users/rides/1/requests',
-                                   headers={'Authorization':
-                                            self.get_token()
-                                            })
-        self.assertEqual(response.status_code, 200)
-
     def test_respond_to_request_with_accepted(self):
         """Tests if a driver can respond to a ride request with accepted"""
         response = self.client.put('api/v2/users/rides/1/requests/1',
