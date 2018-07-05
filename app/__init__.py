@@ -23,5 +23,5 @@ def create_app(config_name):
     app.register_error_handler(400, bad_request)
     app.register_error_handler(500, internal_server_error)
     app.register_error_handler(405, method_not_allowed)
-    method_not_allowed
+
     return app
