@@ -22,13 +22,13 @@ Ride-my App is a carpooling application that provides drivers with the ability t
  
  As a driver:
 - Create a ride offer
-- Can fetch all ride requests
 - Can accept/reject ride request
 
 **Application demo**
 * The documentation can be accessed at https://rideapi1.docs.apiary.io/#
+    - To interact with the documentation, https://private-amnesiac-b7e82-rideapi1.apiary-proxy.com/api/v2/rides/
 * To interact with the application via postman
-     * https://rugandaride.herokuapp.com/api/v2
+     * https://rugandaride.herokuapp.com/api/v2/rides/
 
     then use the following endpoints to perform the specified tasks
     
@@ -36,13 +36,12 @@ Ride-my App is a carpooling application that provides drivers with the ability t
     ------------------------                           | ----------------------
     POST /auth/register                                | Create a user account
     POST /auth/login                                   | Log in a user
-    POST /users/rides/                                 | Create an new ride
+    POST /users/rides/                                 | Create a new ride
     GET /rides/                                        | Retrieves all rides
     GET /users/rides/                                  | Retrieves all rides that are created by the user
-    GET /users/rides/< rideid>                         | Retrives a single ride
-    POST /rides/< rideid >/requests                    | Send passenger's request to join a ride
-    GET  /users/rides/< rideid >/requests              | Retrieve passengers who responded to the ride
-    PUT /users/rides/< irdeid >/requests/< r_id>       | Update an ride
+    POST /rides/< ride_id >/requests                   | Send passenger's request to join a ride
+    GET  /users/rides/< ride_id >/requests             | Retrieve passengers who requested to join the ride
+    PUT /users/rides/< irde_id >/requests/< r_id>      | Update a ride request
 
     
 **Getting started with the app**
@@ -63,7 +62,7 @@ Create a new directory and initialize git in it. Clone this repository by runnin
 ```sh
 $ git clone https://github.com/ruganda/Ride-api.git
 ```
-Create a virtual environment. For example, with virtualenv, create a virtual environment named env using
+Create a virtual environment. For example, with virtualenv, create a virtual environment named venv using
 ```sh
 $ virtualenv venv
 ```
@@ -75,10 +74,7 @@ Install the dependencies in the requirements.txt file using pip
 ```sh
 $ pip install -r requirements.txt
 ```
-create a database in postgres called ride_db and then create the tables bb running the following command
-```sh
-$ python create_table.py
-```
+
 Start the application by running
 ```sh
 $ python run.py
