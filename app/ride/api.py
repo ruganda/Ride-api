@@ -25,7 +25,6 @@ class RideAPI(MethodView):
             driver = current_user.username
 
             rides_query = ride_db.fetch_all()
-            print(rides_query)
             for ride in rides_query:
                 if ride['origin'] == data['origin'] and \
                         ride['destination'] == data['destination']\
@@ -40,6 +39,7 @@ class RideAPI(MethodView):
                 'message': 'You offered a ride successfully.',
             }
             return make_response(jsonify(response)), 201
+        return jsonify({'message': validate_ride(data)}), 406
 
     def get(self, current_user, ride_id):
         """Method for passenger to view  rides"""

@@ -5,38 +5,47 @@ import re
 
 def validate_user(data):
     """validates the user and return appropriate message"""
-    if not data['name'].strip() or not data['username'].strip()\
-            or not data['password'].strip():
-        return "all fields are required"
-    elif not re.match("[a-zA-Z0-9_ ]", data['name'].strip()) or\
-            not re.match("[a-zA-Z0-9_ ]", data['username'].strip()) or\
-            not re.match("[a-zA-Z0-9_]", data['password'].strip()):
-        return "Inputs should only contain alphanemeric characters"
-    else:
-        return 'valid'
+    try:
+        if not data['name'].strip() or not data['username'].strip()\
+                or not data['password'].strip():
+            return "all fields are required"
+
+        elif not data['username'].strip().isalnum() or\
+                not data['password'].strip().isalnum():
+            return "Inputs should only contain alphanemeric characters"
+        else:
+            return 'valid'
+    except KeyError:
+        return "All keys are required"
 
 
 def validate_login(data):
-    """validates the user and return appropriate message"""
-    if not data['username'].strip() or not data['password'].strip():
-        return "all fields are required"
-    elif not re.match("[a-zA-Z0-9_ ]", data['username'].strip()) or\
-            not re.match("[a-zA-Z0-9_]", data['password'].strip()):
-        return "Inputs should only contain alphanemeric characters"
-    else:
-        return 'valid'
+    """validates the user and return an appropriate message"""
+    try:
+        if not data['username'].strip() or not data['password'].strip():
+            return "all fields are required"
+        elif not data['username'].strip().isalnum() or\
+                not data['password'].strip().isalnum():
+            return "Inputs should only contain alphanemeric characters"
+        else:
+            return 'valid'
+    except KeyError:
+        return "All keys are required"
 
 
 def validate_ride(data):
     """validates the rides inputs and return appropriate message"""
-    if not data['origin'].strip() or not data['destination'].strip() or\
-            not data['date'].strip():
-        return "all fields are required"
-    elif not re.match("[a-zA-Z0-9_ ]", data['origin'].strip()) or\
-            not re.match("[a-zA-Z0-9_ ]", data['destination'].strip()):
-        return "ride origin should only contain alphanemeric characters "
-    else:
-        return 'valid'
+    try:
+        if not data['origin'].strip() or not data['destination'].strip() or\
+                not data['date'].strip():
+            return "all fields are required"
+        elif not data['origin'].strip().isalnum() or\
+                not data['destination'].strip().isalnum:
+            return "rides should only contain alphanemeric characters "
+        else:
+            return 'valid'
+    except KeyError:
+        return "All keys are required"
 
 
 def validate_date(date_time):
