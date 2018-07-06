@@ -44,8 +44,7 @@ class RideAPI(MethodView):
         """Method for passenger to view  rides"""
         database = Database(app.config['DATABASE_URL'])
         if ride_id:
-            query = database.fetch_single_element(ride_id)
-            print(query)
+            query = database.fetch_by_param('rides', 'id', ride_id)
             if query:
                 ride = Ride(query[0], query[1], query[2], query[3], query[4])
                 response = {'id': ride.ride_id, "origin": ride.origin,

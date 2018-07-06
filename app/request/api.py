@@ -14,15 +14,16 @@ class RequestAPI(MethodView):
         """Post method view for requesting a ride"""
         database = Database(app.config['DATABASE_URL'])
         passenger = current_user.username
-        query = database.find_by_id(ride_id)
-        print(query)
+        query = database.fetch_by_param('rides', 'id', ride_id)
+
         if query is None:
             abort(404)
 
         ride = Ride(query[0], query[1], query[2], query[3], query[4])
         if ride.driver != passenger:
 
-            query = database.send_request(ride_id, passenger)
+            query = database.fetch_by_param('requests', 'passenger', passenger)
+            print(query)
             if query is None:
                 database.send_request(ride_id, passenger)
 
@@ -40,7 +41,7 @@ class RequestAPI(MethodView):
         database = Database(app.config['DATABASE_URL'])
         # first check if the ride was created by the logged in driver
         driver = current_user.username
-        query = database.find_by_id(ride_id)
+        query = database.fetch_by_param('rides', 'id', ride_id)
         if query is None:
             abort(404)
 
@@ -59,7 +60,7 @@ class RequestAPI(MethodView):
         database = Database(app.config['DATABASE_URL'])
         # first check if the ride was created by the logged in driver
         driver = current_user.username
-        query = database.find_by_id(ride_id)
+        query = database.fetch_by_param('rides', 'id', ride_id)
         if query is None:
             abort(404)
 

@@ -21,7 +21,8 @@ class RegistrationView(MethodView):
         validate = validate_user(data)
         if validate == 'valid':
 
-            user_query = database.fetch_single_user(data['username'])
+            user_query = database.fetch_by_param(
+                'users', 'username', data['username'])
             if user_query:
                 response = {
 
@@ -51,7 +52,8 @@ class LoginView(MethodView):
         if validate == 'valid':
             try:
 
-                query = database.fetch_single_user(data['username'])
+                query = database.fetch_by_param(
+                    'users', 'username', data['username'])
                 if not query:
                     response = {
                         'message': 'user not found ,' +
@@ -60,7 +62,7 @@ class LoginView(MethodView):
                     return make_response(jsonify(response)), 401
 
                 the_user = User(query[0], query[1], query[2], query[3])
-                print(the_user.username)
+
                 if the_user.username == data['username'] and\
                         check_password_hash(the_user.password,
                                             data['password']):

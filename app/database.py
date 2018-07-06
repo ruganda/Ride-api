@@ -44,19 +44,20 @@ class Database:
         """Trancates the table"""
         self.cur.execute("TRUNCATE TABLE {} RESTART IDENTITY".format(table))
 
-    def fetch_all(self):
-        """ Fetches all ride recods from the database"""
-        self.cur.execute("SELECT * FROM rides ")
-        rows = self.cur.fetchall()
-        rides = []
-        for row in rows:
-            row = {'id': row[0], 'origin': row[1],
-                   'destination': row[2],
-                   'date': row[3], "driver": row[4]
-                   }
-            rides.append(row)
-        return rides
+    def fetch_by_param(self, table_name, column, param):
+        """Fetches a single a parameter from a specific table and column"""
+        query = "SELECT * FROM {} WHERE {} = '{}'".format(
+            table_name, column, param)
+        self.cur.execute(query)
+        row = self.cur.fetchone()
+        return row
 
+    # class UseBbQueries(Database):
+    #     """This class handles database transactions for the user"""
+
+    #     def __init__(self):
+    #         Database.__init__(self, app.config['DATABASE_URL'])
+    
     def insert_user_data(self, data):
         query = "INSERT INTO users (name, username, password)\
             VALUES('{}','{}', '{}');".format(data['name'],
@@ -99,31 +100,15 @@ class Database:
                              'status': row[2], 'passenger': row[3]})
         return requests
 
-    def fetch_single_user(self, username):
-        """Gets a single user by id from the database"""
-        self.cur.execute(
-            "SELECT * FROM users WHERE username = '{}'".format(username))
-        user = self.cur.fetchone()
-        return user
-
-    def fetch_single_element(self, r_id):
-        """selects a single ride by id from the database"""
-        self.cur.execute(
-            "SELECT * FROM rides WHERE id = '{}'".format(r_id))
-
-        row = self.cur.fetchone()
-        return row
-
-    def fetch_by_ride(self, r_id):
-        """ Gets a ride by id from the requests table"""
-        self.cur.execute(
-            "SELECT * FROM requests WHERE ride_id = '{}'".format(r_id))
-        row = self.cur.fetchone()
-        return row
-
-    def find_by_id(self, r_id):
-        """selects a single ride by id from the database"""
-        self.cur.execute(
-            "SELECT * FROM rides WHERE id = '{}'".format(r_id))
-        row = self.cur.fetchone()
-        return row
+    def fetch_all(self):
+        """ Fetches all ride recods from the database"""
+        self.cur.execute("SELECT * FROM rides ")
+        rows = self.cur.fetchall()
+        rides = []
+        for row in rows:
+            row = {'id': row[0], 'origin': row[1],
+                   'destination': row[2],
+                   'date': row[3], "driver": row[4]
+                   }
+            rides.append(row)
+        return rides
