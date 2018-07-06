@@ -7,7 +7,7 @@ from flask import jsonify, request, make_response
 from flask import current_app as app
 from app.models import User
 from app.validate import validate_user, validate_login
-from app.database import Database
+from app.database import Database, UserBbQueries
 
 
 class RegistrationView(MethodView):
@@ -16,7 +16,7 @@ class RegistrationView(MethodView):
     def post(self):
         """registers a user"""
         database = Database(app.config['DATABASE_URL'])
-
+        user_db = UserBbQueries()
         data = request.get_json()
         validate = validate_user(data)
         if validate == 'valid':
@@ -31,7 +31,7 @@ class RegistrationView(MethodView):
 
                 return make_response(jsonify(response)), 409
             else:
-                database.insert_user_data(data)
+                user_db.insert_user_data(data)
                 response = {
                     'message': 'You registered successfully. Please login.'
                 }

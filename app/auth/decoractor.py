@@ -23,7 +23,9 @@ def token_required(f):
             data = jwt.decode(token, 'donttouch')
             # user = User(data['username'])
             database = Database(app.config['DATABASE_URL'])
-            query = database.fetch_single_user(data['username'])
+            
+            query = database.fetch_by_param(
+                'users', 'username', data['username'])
             current_user = User(query[0], query[1], query[2], query[3])
         except:
             return jsonify({'message': 'Token is invalid!'}), 401

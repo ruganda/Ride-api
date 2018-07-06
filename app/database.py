@@ -52,12 +52,13 @@ class Database:
         row = self.cur.fetchone()
         return row
 
-    # class UseBbQueries(Database):
-    #     """This class handles database transactions for the user"""
 
-    #     def __init__(self):
-    #         Database.__init__(self, app.config['DATABASE_URL'])
-    
+class UserBbQueries(Database):
+    """This class handles database transactions for the user"""
+
+    def __init__(self):
+        Database.__init__(self, app.config['DATABASE_URL'])
+
     def insert_user_data(self, data):
         query = "INSERT INTO users (name, username, password)\
             VALUES('{}','{}', '{}');".format(data['name'],
@@ -67,12 +68,12 @@ class Database:
         self.cur.execute(query)
         self.conn.commit()
 
-    def update_request(self, r_id, data):
-        '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
-                         .format(data['status'], r_id))
 
-        self.conn.commit()
+class RideBbQueries(Database):
+    """This class handles database transactions for the ride"""
+
+    def __init__(self):
+        Database.__init__(self, app.config['DATABASE_URL'])
 
     def insert_ride_data(self, data, driver):
         """Insert a new ride record to the database"""
@@ -83,9 +84,29 @@ class Database:
         self.cur.execute(query)
         self.conn.commit()
 
+    def fetch_all(self):
+        """ Fetches all ride recods from the database"""
+        self.cur.execute("SELECT * FROM rides ")
+        rows = self.cur.fetchall()
+        rides = []
+        for row in rows:
+            row = {'id': row[0], 'origin': row[1],
+                   'destination': row[2],
+                   'date': row[3], "driver": row[4]
+                   }
+            rides.append(row)
+        return rides
+
+
+class RequestBbQueries(Database):
+    """This class handles database transactions for requests"""
+
+    def __init__(self):
+        Database.__init__(self, app.config['DATABASE_URL'])
+
     def send_request(self, ride_id, passenger):
         query = "INSERT INTO requests (ride_id, status, passenger)\
-         VALUES('{}','{}', '{}');".format(ride_id, 'requested', passenger)
+            VALUES('{}','{}', '{}');".format(ride_id, 'requested', passenger)
         self.cur.execute(query)
         self.conn.commit()
 
@@ -100,15 +121,9 @@ class Database:
                              'status': row[2], 'passenger': row[3]})
         return requests
 
-    def fetch_all(self):
-        """ Fetches all ride recods from the database"""
-        self.cur.execute("SELECT * FROM rides ")
-        rows = self.cur.fetchall()
-        rides = []
-        for row in rows:
-            row = {'id': row[0], 'origin': row[1],
-                   'destination': row[2],
-                   'date': row[3], "driver": row[4]
-                   }
-            rides.append(row)
-        return rides
+    def update_request(self, r_id, data):
+        '''Updates the status in the database'''
+        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
+                         .format(data['status'], r_id))
+
+        self.conn.commit()

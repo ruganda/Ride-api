@@ -2,7 +2,7 @@
 from flask import jsonify, make_response, request, abort, current_app as app
 from flask.views import MethodView
 from app.models import Request, Ride
-from app.database import Database
+from app.database import Database, RequestBbQueries
 from app.auth.decoractor import token_required
 
 
@@ -13,6 +13,8 @@ class RequestAPI(MethodView):
     def post(self, current_user, ride_id):
         """Post method view for requesting a ride"""
         database = Database(app.config['DATABASE_URL'])
+        request_db = RequestBbQueries()
+
         passenger = current_user.username
         query = database.fetch_by_param('rides', 'id', ride_id)
 
@@ -25,7 +27,7 @@ class RequestAPI(MethodView):
             query = database.fetch_by_param('requests', 'passenger', passenger)
             print(query)
             if query is None:
-                database.send_request(ride_id, passenger)
+                request_db.send_request(ride_id, passenger)
 
                 return jsonify({'msg': 'A request to join this ride' +
                                 " has been sent"}), 201
@@ -39,6 +41,7 @@ class RequestAPI(MethodView):
     def get(self, current_user, ride_id):
         '''Gets all ride requests for a specific ride'''
         database = Database(app.config['DATABASE_URL'])
+        request_db = RequestBbQueries()
         # first check if the ride was created by the logged in driver
         driver = current_user.username
         query = database.fetch_by_param('rides', 'id', ride_id)
@@ -48,7 +51,7 @@ class RequestAPI(MethodView):
         ride = Ride(query[0], query[1], query[2], query[3], query[4])
         if ride.driver == driver:
 
-            ride_requests = database.fetch_by_id(ride_id)
+            ride_requests = request_db.fetch_by_id(ride_id)
             if ride_requests == []:
                 return jsonify({"msg": "You haven't recieved any ride" +
                                 " requests yet"}), 200
@@ -58,6 +61,7 @@ class RequestAPI(MethodView):
     def put(self, current_user, ride_id, request_id):
         """Accept or reject a ride request"""
         database = Database(app.config['DATABASE_URL'])
+        request_db = RequestBbQueries()
         # first check if the ride was created by the logged in driver
         driver = current_user.username
         query = database.fetch_by_param('rides', 'id', ride_id)
@@ -69,7 +73,7 @@ class RequestAPI(MethodView):
             data = request.get_json()
             if data['status'] == 'accepted' or data['status'] == 'rejected':
 
-                database.update_request(ride_id, data)
+                request_db.update_request(ride_id, data)
                 response = {
                     'message': 'you have {} this ride request'
                     .format(data['status'])
