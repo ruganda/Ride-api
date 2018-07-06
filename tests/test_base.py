@@ -24,13 +24,13 @@ class TestBase(unittest.TestCase):
     }
 
     valid_ride = {
-        'origin': 'test origin',
-        'destination': "test destination",
+        'origin': 'origin',
+        'destination': "destination",
         "date": "2018-11-12 12:49:00"
     }
     post_ride = {
-        'origin': 'origin',
-        'destination': "test destination",
+        'origin': 'kampala',
+        'destination': "destination",
         "date": "2019-11-12 12:49:00"
     }
 
