@@ -6,9 +6,6 @@ from test_base import TestBase
 
 class TestAuth(TestBase):
 
-    def setUp(self):
-        pass
-
     def test_register_valid_details(self):
         """ Tests creating a new user with valid details """
         test_user = {

@@ -1,7 +1,8 @@
 """This module handles RequestApi class and its methods"""
 from flask import jsonify, make_response, request, abort, current_app as app
 from flask.views import MethodView
-from app.models import Database, Request, Ride
+from app.models import Request, Ride
+from app.database import Database, RequestBbQueries
 from app.auth.decoractor import token_required
 
 
@@ -12,89 +13,73 @@ class RequestAPI(MethodView):
     def post(self, current_user, ride_id):
         """Post method view for requesting a ride"""
         database = Database(app.config['DATABASE_URL'])
-        database.create_tables()
+        request_db = RequestBbQueries()
 
-        if ride_id:
-            """ first check if the person making a request is the driver/owner
-                if the owner wants to respond to his own ride . stop him.
-            """
-        ride = Ride(id=ride_id)
-        the_ride = ride.find_by_id(ride_id)
-        if the_ride is None:
+        passenger = current_user.username
+        query = database.fetch_by_param('rides', 'id', ride_id)
+
+        if query is None:
             abort(404)
-        if the_ride['driver'] != current_user[2]:
 
-            try:
-                a_request = Request(ride_id=ride_id)
-                passenger = current_user[2]
-                all_reqs = a_request.find_by_id(ride_id)
-                for req in all_reqs:
-                    req = {"Id": req['Id'], "ride_id": req['ride_id'],
-                           "status": req['status'],
-                           "passenger": req['passenger']}
-                    if req in all_reqs:
-                        return jsonify({'msg': 'You already requested' +
-                                        ' to join this ride'}), 409
+        ride = Ride(query[0], query[1], query[2], query[3], query[4])
+        if ride.driver != passenger:
 
-                a_request.insert(ride_id, passenger)
+            query = database.fetch_by_param('requests', 'passenger', passenger)
+            print(query)
+            if query is None:
+                request_db.send_request(ride_id, passenger)
+
                 return jsonify({'msg': 'A request to join this ride' +
                                 " has been sent"}), 201
 
-            except Exception as e:
-                response = {
-                    'message': str(e)
-                }
-                return make_response(jsonify(response)), 500
+            return jsonify({'msg': 'You already requested' +
+                            ' to join this ride'}), 409
+
         return jsonify(
             {'message': "You can't request to join your own ride"}), 403
 
     def get(self, current_user, ride_id):
         '''Gets all ride requests for a specific ride'''
         database = Database(app.config['DATABASE_URL'])
-        database.create_tables()
-
+        request_db = RequestBbQueries()
         # first check if the ride was created by the logged in driver
-        ride = Ride(id=ride_id)
-        the_ride = ride.find_by_id(ride_id)
-        if the_ride is None:
+        driver = current_user.username
+        query = database.fetch_by_param('rides', 'id', ride_id)
+        if query is None:
             abort(404)
 
-        if the_ride['driver'] == current_user[2]:
-            request = Request(ride_id=ride_id)
-            requests = request.find_by_id(ride_id)
-            if requests == []:
+        ride = Ride(query[0], query[1], query[2], query[3], query[4])
+        if ride.driver == driver:
+
+            ride_requests = request_db.fetch_by_id(ride_id)
+            if ride_requests == []:
                 return jsonify({"msg": "You haven't recieved any ride" +
                                 " requests yet"}), 200
-            return jsonify(requests), 200
+            return jsonify(ride_requests), 200
         abort(404)
 
     def put(self, current_user, ride_id, request_id):
         """Accept or reject a ride request"""
         database = Database(app.config['DATABASE_URL'])
-        database.create_tables()
-
+        request_db = RequestBbQueries()
         # first check if the ride was created by the logged in driver
-        ride = Ride(id=ride_id)
-        the_ride = ride.find_by_id(ride_id)
-        if the_ride is None:
+        driver = current_user.username
+        query = database.fetch_by_param('rides', 'id', ride_id)
+        if query is None:
             abort(404)
 
-        if the_ride['driver'] == current_user[2]:
+        ride = Ride(query[0], query[1], query[2], query[3], query[4])
+        if ride.driver == driver:
             data = request.get_json()
             if data['status'] == 'accepted' or data['status'] == 'rejected':
-                try:
-                    req = Request(id=request_id, ride_id=ride_id)
-                    req.update_request(request_id, data)
-                    response = {
-                        'message': 'you have {} this ride request'
-                        .format(data['status'])
-                    }
-                    return make_response(jsonify(response)), 200
-                except Exception as e:
-                    response = {
-                        'message': str(e)
-                    }
-                    return make_response(jsonify(response)), 500
+
+                request_db.update_request(ride_id, data)
+                response = {
+                    'message': 'you have {} this ride request'
+                    .format(data['status'])
+                }
+                return make_response(jsonify(response)), 200
+
             response = {
                 'message': 'The status can only be in 3 states,' +
                 'requested, accepted and rejected'

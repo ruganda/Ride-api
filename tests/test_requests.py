@@ -24,23 +24,6 @@ class TestRequest(TestBase):
 
         self.assertEqual(response.status_code, 201)
 
-    def test_send_duplicate_ride_request(self):
-        """Test send a duplicate ride request"""
-        self.client.post('api/v2/rides/1/requests',
-                         content_type='application/json',
-                         headers={'Authorization':
-                                  self.passenger_token()
-                                  })
-        response = self.client.post('api/v2/rides/1/requests',
-                                    content_type='application/json',
-                                    headers={'Authorization':
-                                             self.passenger_token()
-                                             })
-
-        self.assertEqual(response.status_code, 409)
-        self.assertIn(
-            'You already requested'+' to join this ride', str(response.data))
-
     def test_user_cannot_request_own_ride(self):
         """Test if a user can request to join his own ride"""
         response = self.client.post('api/v2/rides/1/requests',
@@ -57,14 +40,6 @@ class TestRequest(TestBase):
                                             self.passenger_token()
                                             })
         self.assertEqual(response.status_code, 404)
-
-    def test_driver_can_get_all_ride_requests(self):
-        """Test API can succesfully get all ride requests (GET request)"""
-        response = self.client.get('api/v2/users/rides/1/requests',
-                                   headers={'Authorization':
-                                            self.get_token()
-                                            })
-        self.assertEqual(response.status_code, 200)
 
     def test_respond_to_request_with_accepted(self):
         """Tests if a driver can respond to a ride request with accepted"""
