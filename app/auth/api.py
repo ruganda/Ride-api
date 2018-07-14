@@ -1,6 +1,6 @@
 """This module handles class based views for authentication"""
 from datetime import datetime, timedelta
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 import jwt
 from flask.views import MethodView
 from flask import jsonify, request, make_response

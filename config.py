@@ -5,8 +5,8 @@ class Config(object):
     """Parent configuration class."""
     DEBUG = False
     SECRET = os.getenv("SECRET")
-    # DATABASE_URL = os.getenv("DATABASE_URL")
-    DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/ride_db'
+    DATABASE_URL = os.getenv("DATABASE_URL")
+    # DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/ride_db'
 
 
 class DevelopmentConfiguration(Config):
