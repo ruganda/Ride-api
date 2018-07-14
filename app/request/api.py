@@ -1,7 +1,7 @@
 """This module handles RequestApi class and its methods"""
 from flask import jsonify, make_response, request, abort, current_app as app
 from flask.views import MethodView
-from app.models import Request, Ride
+from app.models import Ride
 from app.database import Database, RequestBbQueries
 from app.auth.decoractor import token_required
 

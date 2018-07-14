@@ -1,6 +1,5 @@
 """This module contain functions that handle input validation"""
 from datetime import datetime
-import re
 
 
 def validate_user(data):
