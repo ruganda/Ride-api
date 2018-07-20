@@ -24,7 +24,7 @@ class TestingConfiguration(Config):
 class ProductionConfiguration(Config):
     """Configurations for Production."""
     DEBUG = False
-
+    DATABASE_URL = os.getenv("DATABASE_URL")
 
 app_config = {
     'DEFAULT': DevelopmentConfiguration,
