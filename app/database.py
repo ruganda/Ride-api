@@ -25,7 +25,7 @@ class Database:
 
     def create_database(self, db_name):
         """Creates a database to be used in production"""
-        self.cur.execute('CREATE DATABASE {};'.format(self.db_name))
+        self.cur.execute('CREATE DATABASE {};'.format(db_name))
 
     def create_tables(self):
         """Creates database tables """
