@@ -24,7 +24,7 @@ class TestingConfiguration(Config):
 class ProductionConfiguration(Config):
     """Configurations for Production."""
     DEBUG = False
-    DATABASE_URL = os.getenv("DATABASE_URL")
+    DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/heroku_db'
 
 app_config = {
     'DEFAULT': DevelopmentConfiguration,
