@@ -23,6 +23,10 @@ class Database:
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
 
+    def create_database(self, db_name):
+        """Creates a database to be used in production"""
+        cur.execute('CREATE DATABASE {};'.format(self.db_name))
+
     def create_tables(self):
         """Creates database tables """
         create_table = "CREATE TABLE IF NOT EXISTS users\

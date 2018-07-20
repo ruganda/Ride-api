@@ -1,2 +1,2 @@
-web: gunicorn run:app
+web: gunicorn manage:app
 release: psql -c 'create database ride_db;' -U postgres
