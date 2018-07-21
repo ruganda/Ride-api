@@ -24,7 +24,7 @@ class TestingConfiguration(Config):
 class ProductionConfiguration(Config):
     """Configurations for Production."""
     DEBUG = False
-    DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/ride_db'
+    DATABASE_URL = 'postgres://akcolxjufhesko:d01b99b7009c67760234fb1bcb4229e5566490f2e125fc4b539e5d83ee14fbae@ec2-23-21-216-174.compute-1.amazonaws.com:5432/d6bbirccjc7b3e'
 
 app_config = {
     'DEFAULT': DevelopmentConfiguration,
