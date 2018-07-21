@@ -9,5 +9,5 @@ db = Database('postgres://akcolxjufhesko:d01b99b7009c67760234fb1bcb4229e5566490f
 if __name__ == '__main__':
     # db.create_database('ride_db')
     db.create_tables()
-    # port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 8000))
+    app.run(port=port)
