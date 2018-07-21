@@ -19,7 +19,7 @@ class Database:
 
         self.conn = psycopg2.connect(
             database=d_b, user=username, password=password,
-            host='127.0.0.1', port=5432)
+            host=hostname, port=port)
         self.conn.autocommit = True
         self.cur = self.conn.cursor()
 
