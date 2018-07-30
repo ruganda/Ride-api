@@ -29,10 +29,10 @@ class RequestAPI(MethodView):
             if query is None:
                 request_db.send_request(ride_id, passenger)
 
-                return jsonify({'msg': 'A request to join this ride' +
+                return jsonify({'message': 'A request to join this ride' +
                                 " has been sent"}), 201
 
-            return jsonify({'msg': 'You already requested' +
+            return jsonify({'message': 'You already requested' +
                             ' to join this ride'}), 409
 
         return jsonify(
