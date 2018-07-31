@@ -107,10 +107,11 @@ class RequestBbQueries(Database):
 
     def __init__(self):
         Database.__init__(self, app.config['DATABASE_URL'])
+        self.status = 'requested'
 
     def send_request(self, ride_id, passenger):
         query = "INSERT INTO requests (ride_id, status, passenger)\
-            VALUES('{}','{}', '{}');".format(ride_id, 'requested', passenger)
+            VALUES('{}','{}', '{}');".format(ride_id, self.status, passenger)
         self.cur.execute(query)
         self.conn.commit()
 
@@ -129,8 +130,8 @@ class RequestBbQueries(Database):
 
     def update_request(self, r_id, data):
         '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
-                         .format(data['status'], r_id))
+        self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
+                         (data['status'], r_id))
 
         self.conn.commit()
 
