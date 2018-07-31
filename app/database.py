@@ -130,8 +130,8 @@ class RequestBbQueries(Database):
 
     def update_request(self, r_id, data):
         '''Updates the status in the database'''
-        self.cur.execute("UPDATE requests SET status=%s WHERE id=%s",
-                         (data['status'], r_id))
+        self.cur.execute("UPDATE requests SET status='{}' WHERE id='{}'"
+                         .format(data['status'], r_id))
 
         self.conn.commit()
 

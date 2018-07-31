@@ -79,7 +79,7 @@ class RequestAPI(MethodView):
             print(data['status'])
             if data['status'] == 'accepted' or data['status'] == 'rejected':
 
-                request_db.update_request(ride_id, data)
+                request_db.update_request(request_id, data)
                 response = {
                     'message': 'you have {} this ride request'
                     .format(data['status'])
