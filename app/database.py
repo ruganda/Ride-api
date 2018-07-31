@@ -121,8 +121,10 @@ class RequestBbQueries(Database):
         rows = self.cur.fetchall()
         requests = []
         for row in rows:
-            requests.append({'Id': row[0], 'ride_id': row[1],
-                             'status': row[2], 'passenger': row[3]})
+            row = {'id': row[0], 'ride_id': row[1],
+                   'status': row[2], 'passenger': row[3]
+                   }
+            requests.append(row)
         return requests
 
     def update_request(self, r_id, data):
@@ -131,3 +133,17 @@ class RequestBbQueries(Database):
                          .format(data['status'], r_id))
 
         self.conn.commit()
+
+    def fetch_by_arg(self, colomn, passenger):
+        """ Gets a ride by passenger from the requests table"""
+        self.cur.execute(
+            "SELECT * FROM requests WHERE {} = '{}'"
+            .format(colomn, passenger))
+        rows = self.cur.fetchall()
+        requests = []
+        for row in rows:
+            row = {'id': row[0], 'ride_id': row[1],
+                   'status': row[2], 'passenger': row[3]
+                   }
+            requests.append(row)
+        return requests

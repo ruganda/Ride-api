@@ -1,7 +1,7 @@
 """This module handles RequestApi class and its methods"""
 from flask import jsonify, make_response, request, abort, current_app as app
 from flask.views import MethodView
-from app.models import Ride
+from app.models import Ride, Request
 from app.database import Database, RequestBbQueries
 from app.auth.decoractor import token_required
 
@@ -22,21 +22,26 @@ class RequestAPI(MethodView):
             abort(404)
 
         ride = Ride(query[0], query[1], query[2], query[3], query[4])
+
         if ride.driver != passenger:
 
-            query = database.fetch_by_param('requests', 'passenger', passenger)
-            print(query)
-            if query is None:
-                request_db.send_request(ride_id, passenger)
+            requests = request_db.fetch_by_arg('passenger', passenger)
+            for req in requests:
 
+                request = Request(req['id'], req['ride_id'], req['status'],
+                                  req['status'])
+                print(request.ride_id, ride_id, request.passenger, passenger)
+                if request.ride_id == ride_id and \
+                        request.passenger == passenger:
+
+                    return jsonify({'message': 'You already requested' +
+                                    ' to join this ride'}), 409
+                request_db.send_request(ride_id, passenger)
                 return jsonify({'message': 'A request to join this ride' +
                                 " has been sent"}), 201
-
-            return jsonify({'message': 'You already requested' +
-                            ' to join this ride'}), 409
-
-        return jsonify(
-            {'message': "You can't request to join your own ride"}), 403
+        else:
+            return jsonify(
+                {'message': "You can't request to join your own ride"}), 403
 
     def get(self, current_user, ride_id):
         '''Gets all ride requests for a specific ride'''
@@ -71,6 +76,7 @@ class RequestAPI(MethodView):
         ride = Ride(query[0], query[1], query[2], query[3], query[4])
         if ride.driver == driver:
             data = request.get_json()
+            print(data['status'])
             if data['status'] == 'accepted' or data['status'] == 'rejected':
 
                 request_db.update_request(ride_id, data)
