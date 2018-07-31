@@ -140,6 +140,7 @@ class RequestBbQueries(Database):
             "SELECT * FROM requests WHERE {} = '{}'"
             .format(colomn, passenger))
         rows = self.cur.fetchall()
+
         requests = []
         for row in rows:
             row = {'id': row[0], 'ride_id': row[1],

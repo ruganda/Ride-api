@@ -25,20 +25,20 @@ class RequestAPI(MethodView):
 
         if ride.driver != passenger:
 
-            requests = request_db.fetch_by_arg('passenger', passenger)
-            for req in requests:
+            all_reqs = request_db.fetch_by_arg('passenger', passenger)
+            # print(ride_id in all_reqs.keys)
+            req_values = []
+            for i in range(len(all_reqs)):
+                # print(all_reqs[i]['ride_id'])
+                req_values.append(str(all_reqs[i]['ride_id']))
 
-                request = Request(req['id'], req['ride_id'], req['status'],
-                                  req['status'])
-                print(request.ride_id, ride_id, request.passenger, passenger)
-                if request.ride_id == ride_id and \
-                        request.passenger == passenger:
+            if str(ride_id) in req_values:
+                return jsonify({'msg': 'You already requested' +
+                                ' to join this ride'}), 409
 
-                    return jsonify({'message': 'You already requested' +
-                                    ' to join this ride'}), 409
-                request_db.send_request(ride_id, passenger)
-                return jsonify({'message': 'A request to join this ride' +
-                                " has been sent"}), 201
+            request_db.send_request(ride_id, passenger)
+            return jsonify({'msg': 'A request to join this ride' +
+                            " has been sent"}), 201
         else:
             return jsonify(
                 {'message': "You can't request to join your own ride"}), 403
