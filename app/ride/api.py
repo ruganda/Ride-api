@@ -16,7 +16,7 @@ class RideAPI(MethodView):
         database = Database(app.config['DATABASE_URL'])
         ride_db = RideBbQueries()
         data = request.get_json()
-
+        print('>>>>>>>>>>>', data)
         if validate_date(data['date']) != 'valid':
             return jsonify({'message': validate_date(data['date'])}), 406
 

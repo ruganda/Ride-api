@@ -33,11 +33,11 @@ class RequestAPI(MethodView):
                 req_values.append(str(all_reqs[i]['ride_id']))
 
             if str(ride_id) in req_values:
-                return jsonify({'msg': 'You already requested' +
+                return jsonify({'message': 'You already requested' +
                                 ' to join this ride'}), 409
 
             request_db.send_request(ride_id, passenger)
-            return jsonify({'msg': 'A request to join this ride' +
+            return jsonify({'message': 'A request to join this ride' +
                             " has been sent"}), 201
         else:
             return jsonify(
@@ -57,9 +57,7 @@ class RequestAPI(MethodView):
         if ride.driver == driver:
 
             ride_requests = request_db.fetch_by_id(ride_id)
-            if ride_requests == []:
-                return jsonify({"msg": "You haven't recieved any ride" +
-                                " requests yet"}), 200
+
             return jsonify(ride_requests), 200
         abort(404)
 

@@ -6,7 +6,7 @@ class Config(object):
     DEBUG = False
     SECRET = os.getenv("SECRET")
     # DATABASE_URL = os.getenv("DATABASE_URL")
-    DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/ride_db'
+    DATABASE_URL = 'postgresql://postgres:15December@localhost:5432/ride_db'
 
 
 class DevelopmentConfiguration(Config):
@@ -18,7 +18,7 @@ class TestingConfiguration(Config):
     """Configurations for Testing."""
     TESTING = True
     DEBUG = True
-    DATABASE_URL = 'postgresql://postgres:15december@localhost:5432/test_db'
+    DATABASE_URL = 'postgresql://postgres:15December@localhost:5432/test_db'
 
 
 class ProductionConfiguration(Config):

@@ -1,0 +1,48 @@
+---
+machine:
+  environment:
+    CODECLIMATE_REPO_TOKEN: 4a7c311489b2c2ef4e3b7b95e4ecd2908d08a89d2c16d88395323aafd84a15cf
+    
+engines:
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - python
+  fixme:
+    enabled: true
+  pep8:
+    enabled: true
+  radon:
+    enabled: true
+ratings:
+  paths:
+  - "**.py"
+exclude_paths:
+  - "*docs/*"
+  - "*examples/*"
+  - "*api/songs/models*"
+  - "*/site-packages/*"
+  - "*markupsafe/*"
+  - "*psycopg2/*"
+  - "*six.py*"
+  - "*sqlalchemy/*"
+  - "*werkzeug/*"
+  - "*stringprep.py*"
+  - "*uuid.py*"
+  - "*ctypes/*"
+  - "*decimal.py*"
+  - "*encodings/*"
+  - "*hmac.py*"
+  - "*asyncio/*"
+  - "*concurrent/*"
+  - "*multiprocessing/*"
+  - "*mimetypes.py*"
+  - "*numbers.py*"
+  - "*pydoc.py*"
+  - "*http/*"
+  - "*test/*"
+  - "*html/*"
+  - "*_bootlocale.py*"
+  - "*typing.py*"
+  
