@@ -79,8 +79,10 @@ class RequestAPI(MethodView):
 
                 request_db.update_request(request_id, data)
                 response = {
+
                     'message': 'you have {} this ride request'
-                    .format(data['status'])
+                    .format(data['status']),
+                    'status': data['status']
                 }
                 return make_response(jsonify(response)), 200
 

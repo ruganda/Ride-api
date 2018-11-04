@@ -16,7 +16,6 @@ class RideAPI(MethodView):
         database = Database(app.config['DATABASE_URL'])
         ride_db = RideBbQueries()
         data = request.get_json()
-        print('>>>>>>>>>>>', data)
         if validate_date(data['date']) != 'valid':
             return jsonify({'message': validate_date(data['date'])}), 406
 
@@ -51,14 +50,11 @@ class RideAPI(MethodView):
                 ride = Ride(query[0], query[1], query[2], query[3], query[4])
                 response = {'id': ride.ride_id, "origin": ride.origin,
                             'destination': ride.destination,
-                            "date_time": ride.date_time, 'driver': ride.driver}
+                            "date_time": ride.date_time, 'driver': ride.driver,
+                            'is_owner': ride.drive == current_user}
                 return jsonify(response), 200
-            return jsonify({'msg': "Ride not found "}), 404
+            return jsonify({'message': "Ride not found "}), 404
 
         else:
             rides = ride_db.fetch_all()
-            if rides == []:
-                return jsonify(
-                    {"msg": " There are no rides rides at the moment"
-                     }), 200
             return jsonify(rides), 200

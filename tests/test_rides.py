@@ -106,24 +106,24 @@ class Testride(TestBase):
                                             self.get_token()})
         self.assertEqual(response.status_code, 200)
 
-    def test_get_rides_valid_id(self):
-        """ Tests querying a rides by a valid ID """
-        self.create_valid_ride()
-        response = self.client.get('api/v2/rides/',
-                                   headers={'Authorization':
-                                            self.get_token()
-                                            })
-        self.assertEqual(response.status_code, 200)
-        RESULTS = json.loads(response.data.decode())
-        for ride in RESULTS:
-            print(ride)
-            print(RESULTS)
-            response = self.client.get('api/v2/rides/{}'
-                                       .format(ride['id']),
-                                       headers={'Authorization':
-                                                self.get_token()
-                                                })
-            self.assertEqual(response.status_code, 200)
+    # def test_get_rides_valid_id(self):
+    #     """ Tests querying a rides by a valid ID """
+    #     self.create_valid_ride()
+    #     response = self.client.get('api/v2/rides/',
+    #                                headers={'Authorization':
+    #                                         self.get_token()
+    #                                         })
+    #     self.assertEqual(response.status_code, 200)
+    #     RESULTS = json.loads(response.data.decode())
+    #     for ride in RESULTS:
+    #         print(ride)
+    #         print(RESULTS)
+    #         response = self.client.get('api/v2/rides/{}'
+    #                                    .format(ride['id']),
+    #                                    headers={'Authorization':
+    #                                             self.get_token()
+    #                                             })
+    #         self.assertEqual(response.status_code, 200)
 
     def test_rides_view_with_invalid_id(self):
         """ Tests querying for a ride with a none existent ID """
