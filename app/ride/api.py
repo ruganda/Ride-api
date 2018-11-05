@@ -51,7 +51,7 @@ class RideAPI(MethodView):
                 response = {'id': ride.ride_id, "origin": ride.origin,
                             'destination': ride.destination,
                             "date_time": ride.date_time, 'driver': ride.driver,
-                            'is_owner': ride.drive == current_user}
+                            'is_owner': ride.driver == current_user}
                 return jsonify(response), 200
             return jsonify({'message': "Ride not found "}), 404
 
