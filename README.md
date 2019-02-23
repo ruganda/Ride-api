@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/21f420edc64f41b3af73f677633e534f)](https://app.codacy.com/app/ruganda/Ride-api?utm_source=github.com&utm_medium=referral&utm_content=ruganda/Ride-api&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/ruganda/Ride-api.svg?branch=develop)](https://travis-ci.org/ruganda/Ride-api)
 [![Coverage Status](https://coveralls.io/repos/github/ruganda/Ride-api/badge.svg?branch=develop)](https://coveralls.io/github/ruganda/Ride-api?branch=develop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/36b826ffbeae475d95b7d6be8773a178)](https://www.codacy.com/app/ruganda/Ride-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ruganda/Ride-api&amp;utm_campaign=Badge_Grade)
